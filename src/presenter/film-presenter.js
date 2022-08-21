@@ -8,6 +8,7 @@ import FiltersView from '../view/filters-view.js';
 import FilmCardView from '../view/film-card-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
+import { FILMS_IN_LIST_COUNT, TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT } from '../const.js';
 import {render} from '../render.js';
 
 export default class FilmPresenter {
@@ -20,27 +21,26 @@ export default class FilmPresenter {
   mostCommentedListContainer = new FilmListContainerView();
 
   init = (mainContainer) => {
-    this.mainContainer = mainContainer;
     render(new NavView(), mainContainer);
     render(new FiltersView(), mainContainer);
-    render(this.filmsContainer, this.mainContainer);
+    render(this.filmsContainer, mainContainer);
     render(this.filmsList, this.filmsContainer.getElement());
     render(this.filmsListContainer, this.filmsList.getElement());
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < FILMS_IN_LIST_COUNT; i++) {
       render(new FilmCardView(), this.filmsListContainer.getElement());
     }
     render(new ShowMoreButtonView(), this.filmsList.getElement());
 
     render(this.topRatedList, this.filmsContainer.getElement());
     render(this.topRatedListContainer, this.topRatedList.getElement());
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT; i++) {
       render(new FilmCardView(), this.topRatedListContainer.getElement());
     }
 
     render(this.mostCommentedList, this.filmsContainer.getElement());
     render(this.mostCommentedListContainer, this.mostCommentedList.getElement());
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT; i++) {
       render(new FilmCardView(), this.mostCommentedListContainer.getElement());
     }
 

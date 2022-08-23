@@ -1,8 +1,9 @@
-import { generateFilmCard } from '../mock/film.js';
-import { FILMS_IN_LIST_COUNT } from '../const.js';
+import { generateComment } from '../mock/comment.js';
+import { getRandomInteger } from '../utils.js';
+import { MAX_COMMENT_COUNT } from '../const.js';
 
-export default class FilmCardModel {
-  filmCards = Array.from({length: FILMS_IN_LIST_COUNT}, generateFilmCard);
+export default class CommentModel {
+  comments = Array.from({length: getRandomInteger(0, MAX_COMMENT_COUNT)}, generateComment);
 
-  getFilmCards = () => this.filmCards;
+  getComments = () => this.comments;
 }

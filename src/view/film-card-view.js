@@ -4,7 +4,7 @@ import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../cons
 import CommentModel from '../model/comment-model.js';
 
 const createFilmCardView = (filmCard) => {
-  const { title, totalRating, release, duration, genre, description} = filmCard.film_info;
+  const { title, totalRating, release, duration, genre, description } = filmCard.film_info;
 
   const year = release.date !== null
     ? humanizeYear(release.date)
@@ -20,7 +20,7 @@ const createFilmCardView = (filmCard) => {
   };
 
   const commentModel = new CommentModel();
-  const commentsFromModel = [...commentModel.getComments()];
+  const commentsFromModel = [...commentModel.comments];
 
   return `
   <article class="film-card">
@@ -45,22 +45,26 @@ const createFilmCardView = (filmCard) => {
 };
 
 export default class FilmCardView {
+  #element = null;
+  #filmCard = null;
+
   constructor(filmCard) {
-    this.filmCard = filmCard;
+    this.#filmCard = filmCard;
   }
 
-  getTemplate() {
-    return createFilmCardView(this.filmCard);
+
+  get template() {
+    return createFilmCardView(this.#filmCard);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
 }

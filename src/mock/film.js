@@ -1,40 +1,25 @@
-import { getRandomInteger, getRandomFloat } from '../utils.js';
-import { MIN_RATING_VALUE, MAX_RATING_VALUE, TITLES_AND_POSTERS, GENRES, DURATIONS } from '../const.js';
+import { getRandomInteger, getRandomFloat, generateRandomElement} from '../utils.js';
+import { MIN_RATING_VALUE, MAX_RATING_VALUE, GENRES, DURATIONS, TITLES_AND_POSTERS, MAX_YEARS_GAP } from '../const.js';
+import { DESCRIPTIONS } from '../const.js';
+import dayjs from 'dayjs';
 
-export const generateDescription = () => {
-  const description = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    'Cras aliquet varius magna, non porta ligula feugiat eget.',
-    'Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.',
-    'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-    'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
-    'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.',
-  ];
-  const randomIndex = getRandomInteger(0, description.length - 1);
-
-  return description[randomIndex];
-};
-
-const generateTitle = (obj) => {
-  const titles = Object.keys(obj);
-  const randomIndex = getRandomInteger(0, titles.length - 1);
-  return titles[randomIndex];
-};
-
-const generatePoster = (filmTitle, obj) => {
-  if (Object.hasOwn(obj, filmTitle)) {
-    return obj[filmTitle];
+const generateYear = () => {
+  const isYear = Boolean(getRandomInteger(0, 1));
+  if (!isYear) {
+    return null;
   }
-  return null;
+
+  const yearsGap = getRandomInteger(-MAX_YEARS_GAP, MAX_YEARS_GAP);
+  return dayjs().add(yearsGap, 'year').toDate();
 };
 
 export const generateFilmCard = () => ({
-  poster: generatePoster(generateTitle(TITLES_AND_POSTERS), TITLES_AND_POSTERS),
-  title: generateTitle(TITLES_AND_POSTERS),
+  title: generateRandomElement(Object.keys(TITLES_AND_POSTERS)),
+  poster: null,
   rating: getRandomFloat(MIN_RATING_VALUE, MAX_RATING_VALUE, 1),
-  reliseYear: null,
+  releaseYear: generateYear(),
   duration: DURATIONS[getRandomInteger(0, DURATIONS.length - 1)],
   genre: GENRES[getRandomInteger(0, GENRES.length - 1)],
-  description: generateDescription(),
+  description: generateRandomElement(DESCRIPTIONS),
   comments: null,
-});
+})

@@ -1,14 +1,16 @@
 import { createElement } from '../render.js';
-import { humanizeYear } from '../utils.js';
-import { MAX_DESCRIPTION_LENGTH } from '../const.js';
+import { humanizeYear, generatePoster } from '../utils.js';
+import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../const.js';
 import CommentModel from '../model/comment-model.js';
 
 const createFilmCardView = (filmCard) => {
-  const {poster, title, rating, relizeYear, duration, genre, description} = filmCard;
+  const { title, rating, releaseYear, duration, genre, description } = filmCard;
 
-  const year = relizeYear !== null
-    ? humanizeYear(relizeYear)
-    : 'unknown';
+  const year = releaseYear !== null
+    ? humanizeYear(releaseYear)
+    : UNKNOWN_YEAR;
+
+  const filmPoster = generatePoster(title, TITLES_AND_POSTERS);
 
   const getDescription = (descString, maxLength) => {
     if (descString.length > maxLength) {
@@ -30,7 +32,7 @@ const createFilmCardView = (filmCard) => {
         <span class="film-card__duration">${duration}</span>
         <span class="film-card__genre">${genre}</span>
       </p>
-      <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+      <img src="./images/posters/${filmPoster}" alt="" class="film-card__poster">
       <p class="film-card__description">${getDescription(description, MAX_DESCRIPTION_LENGTH)}</p>
       <span class="film-card__comments">${commentsFromModel.length}</span>
     </a>

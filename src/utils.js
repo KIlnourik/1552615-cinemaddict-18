@@ -21,7 +21,23 @@ const getRandomFloat = (min, max, numbsAfterPoint) =>{
   return (Math.random() * (max - min + 1) + min).toFixed(numbsAfterPoint);
 };
 
+const generateRandomElement = (arr) => arr[getRandomInteger(0, arr.length - 1)];
+
+const generatePoster = (filmTitle, obj) => {
+  if (Object.hasOwn(obj, filmTitle)) {
+    return obj[filmTitle];
+  }
+  return null;
+};
+
 const humanizeYear = (date) => dayjs(date).format('YYYY');
 const humanizeDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
 
-export {getRandomInteger, getRandomFloat, humanizeDate, humanizeYear};
+export {
+  getRandomInteger,
+  getRandomFloat,
+  generateRandomElement,
+  generatePoster,
+  humanizeDate,
+  humanizeYear
+};

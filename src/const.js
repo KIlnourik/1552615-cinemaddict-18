@@ -17,7 +17,7 @@ const TITLES_AND_POSTERS = {
 const GENRES = ['Drama', 'Comedy', 'Horror', 'Adventure', 'Fantasy'];
 const DURATIONS = ['1h 26m', '2h 15m', '1h 30m', '3h 45m'];
 const UNKNOWN_YEAR = 'Unknown';
-const MAX_YEARS_GAP = 3;
+const MAX_DAYS_GAP = 3;
 
 const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -40,6 +40,6 @@ export {
   GENRES,
   DURATIONS,
   UNKNOWN_YEAR,
-  MAX_YEARS_GAP,
+  MAX_DAYS_GAP,
   DESCRIPTIONS
 };

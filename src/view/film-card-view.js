@@ -4,10 +4,10 @@ import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../cons
 import CommentModel from '../model/comment-model.js';
 
 const createFilmCardView = (filmCard) => {
-  const { title, rating, releaseYear, duration, genre, description } = filmCard;
+  const { title, totalRating, release, duration, genre, description} = filmCard.film_info;
 
-  const year = releaseYear !== null
-    ? humanizeYear(releaseYear)
+  const year = release.date !== null
+    ? humanizeYear(release.date)
     : UNKNOWN_YEAR;
 
   const filmPoster = generatePoster(title, TITLES_AND_POSTERS);
@@ -26,11 +26,11 @@ const createFilmCardView = (filmCard) => {
   <article class="film-card">
     <a class="film-card__link">
       <h3 class="film-card__title">${title}</h3>
-      <p class="film-card__rating">${rating}</p>
+      <p class="film-card__rating">${totalRating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
         <span class="film-card__duration">${duration}</span>
-        <span class="film-card__genre">${genre}</span>
+        <span class="film-card__genre">${genre.join(', ')}</span>
       </p>
       <img src="./images/posters/${filmPoster}" alt="" class="film-card__poster">
       <p class="film-card__description">${getDescription(description, MAX_DESCRIPTION_LENGTH)}</p>

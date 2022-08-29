@@ -1,16 +1,16 @@
 import { createElement } from '../render.js';
-import { humanizeYear, generatePoster } from '../utils.js';
+import { humanizeYear, getPoster,getRuntimeInHours } from '../utils.js';
 import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../const.js';
 import CommentModel from '../model/comment-model.js';
 
 const createFilmCardView = (filmCard) => {
-  const { title, totalRating, release, duration, genre, description } = filmCard.film_info;
+  const { title, totalRating, release, runtime, genre, description } = filmCard.film_info;
 
   const year = release.date !== null
     ? humanizeYear(release.date)
     : UNKNOWN_YEAR;
 
-  const filmPoster = generatePoster(title, TITLES_AND_POSTERS);
+  const filmPoster = getPoster(title, TITLES_AND_POSTERS);
 
   const getDescription = (descString, maxLength) => {
     if (descString.length > maxLength) {
@@ -29,7 +29,7 @@ const createFilmCardView = (filmCard) => {
       <p class="film-card__rating">${totalRating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${getRuntimeInHours(runtime)}</span>
         <span class="film-card__genre">${genre.join(', ')}</span>
       </p>
       <img src="./images/posters/${filmPoster}" alt="" class="film-card__poster">
@@ -52,7 +52,6 @@ export default class FilmCardView {
     this.#filmCard = filmCard;
   }
 
-
   get template() {
     return createFilmCardView(this.#filmCard);
   }
@@ -67,4 +66,5 @@ export default class FilmCardView {
   removeElement() {
     this.#element = null;
   }
+
 }

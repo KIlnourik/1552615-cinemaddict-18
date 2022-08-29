@@ -1,5 +1,5 @@
-import { getRandomInteger, getRandomFloat, generateRandomElement} from '../utils.js';
-import { MIN_RATING_VALUE, MAX_RATING_VALUE, GENRES, DURATIONS, TITLES_AND_POSTERS, MAX_DAYS_GAP } from '../const.js';
+import { getRandomInteger, getRandomFloat, generateRandomElement, getArrayFromRandomElements } from '../utils.js';
+import { MIN_RATING_VALUE, MAX_RATING_VALUE, GENRES, TITLES_AND_POSTERS, MAX_DAYS_GAP,MAX_COMMENT_COUNT, WRITERS, AGE_RATINGS, DIRECTORS, ACTORS } from '../const.js';
 import { DESCRIPTIONS } from '../const.js';
 import dayjs from 'dayjs';
 
@@ -18,18 +18,18 @@ export const generateFilmCard = () => ({
   'comments': [],
   'film_info': {
     'title': generateRandomElement(Object.keys(TITLES_AND_POSTERS)),
-    'alternative_title': null,
+    'alternativeTitle': null,
     'totalRating': getRandomFloat(MIN_RATING_VALUE, MAX_RATING_VALUE, 1),
     'poster': null,
-    'ageRating': null,
-    'director': null,
-    'writers': [],
-    'actors': [],
+    'ageRating': generateRandomElement(AGE_RATINGS),
+    'director': generateRandomElement(DIRECTORS),
+    'writers': getArrayFromRandomElements(WRITERS),
+    'actors': getArrayFromRandomElements(ACTORS),
     'release': {
       'date': generateDate(),
       'release_country': null,
     },
-    'runtime': DURATIONS[getRandomInteger(0, DURATIONS.length - 1)],
+    'runtime': getRandomInteger(MIN_RATING_VALUE, MAX_COMMENT_COUNT),
     'genre': [GENRES[getRandomInteger(0, GENRES.length - 1)]],
     'description': generateRandomElement(DESCRIPTIONS),
   },

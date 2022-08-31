@@ -15,7 +15,36 @@ const TITLES_AND_POSTERS = {
   'Popeye meets Sinbad': 'popeye-meets-sinbad.png',
 };
 const GENRES = ['Drama', 'Comedy', 'Horror', 'Adventure', 'Fantasy'];
-const DURATIONS = ['1h 26m', '2h 15m', '1h 30m', '3h 45m'];
+const UNKNOWN_YEAR = 'Unknown';
+const MAX_DAYS_GAP = 7;
+const AGE_RATINGS = ['6+', '12+', '16+', '18+'];
+const WRITERS = [
+  'Ernest Hemingway',
+  'Pikachu',
+  'Stephen Edwin King',
+  'Erich Maria Remarque',
+  'Daniel Keyes',
+  'George Orwell'
+];
+const DIRECTORS = [
+  'Christopher Nolan',
+  'Coen brothers',
+  'Guillermo del Toro',
+  'Wes Anderson'
+];
+const ACTORS = [
+  'Jackie Chan',
+  'Clint Eastwood',
+  'Somebody who we really dont know',
+];
+const DESCRIPTIONS = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  'Cras aliquet varius magna, non porta ligula feugiat eget.',
+  'Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.',
+  'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
+  'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
+  'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.',
+];
 
 export {
   FILMS_IN_LIST_COUNT,
@@ -27,5 +56,11 @@ export {
   MAX_COMMENT_COUNT,
   TITLES_AND_POSTERS,
   GENRES,
-  DURATIONS
+  AGE_RATINGS,
+  WRITERS,
+  DIRECTORS,
+  ACTORS,
+  UNKNOWN_YEAR,
+  MAX_DAYS_GAP,
+  DESCRIPTIONS
 };

@@ -1,14 +1,10 @@
-import { getRandomInteger } from '../utils.js';
-import { generateDescription } from './film.js';
-import { EMOTIONS } from '../const.js';
-import CommentDeleteButtonView from '../view/comment-delete-button-view.js';
-
+import { getRandomInteger, generateRandomElement } from '../utils.js';
+import { EMOTIONS, DESCRIPTIONS } from '../const.js';
 
 export const generateComment = () => ({
-  id: getRandomInteger(),
-  text: generateDescription(),
-  emotion: EMOTIONS[getRandomInteger],
-  author: null,
-  date: null,
-  deleteButton: new CommentDeleteButtonView(),
+  'id': getRandomInteger(),
+  'author': null,
+  'comment': generateRandomElement(DESCRIPTIONS),
+  'date': null,
+  'emotion': EMOTIONS[getRandomInteger],
 });

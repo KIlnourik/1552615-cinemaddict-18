@@ -1,14 +1,16 @@
 import { createElement } from '../render.js';
-import { humanizeYear } from '../utils.js';
-import { MAX_DESCRIPTION_LENGTH } from '../const.js';
+import { humanizeYear, getPoster,getRuntimeInHours } from '../utils.js';
+import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../const.js';
 import CommentModel from '../model/comment-model.js';
 
 const createFilmCardView = (filmCard) => {
-  const {poster, title, rating, relizeYear, duration, genre, description} = filmCard;
+  const { title, totalRating, release, runtime, genre, description } = filmCard.film_info;
 
-  const year = relizeYear !== null
-    ? humanizeYear(relizeYear)
-    : 'unknown';
+  const year = release.date !== null
+    ? humanizeYear(release.date)
+    : UNKNOWN_YEAR;
+
+  const filmPoster = getPoster(title, TITLES_AND_POSTERS);
 
   const getDescription = (descString, maxLength) => {
     if (descString.length > maxLength) {
@@ -18,19 +20,19 @@ const createFilmCardView = (filmCard) => {
   };
 
   const commentModel = new CommentModel();
-  const commentsFromModel = [...commentModel.getComments()];
+  const commentsFromModel = [...commentModel.comments];
 
   return `
   <article class="film-card">
     <a class="film-card__link">
       <h3 class="film-card__title">${title}</h3>
-      <p class="film-card__rating">${rating}</p>
+      <p class="film-card__rating">${totalRating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${year}</span>
-        <span class="film-card__duration">${duration}</span>
-        <span class="film-card__genre">${genre}</span>
+        <span class="film-card__duration">${getRuntimeInHours(runtime)}</span>
+        <span class="film-card__genre">${genre.join(', ')}</span>
       </p>
-      <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+      <img src="./images/posters/${filmPoster}" alt="" class="film-card__poster">
       <p class="film-card__description">${getDescription(description, MAX_DESCRIPTION_LENGTH)}</p>
       <span class="film-card__comments">${commentsFromModel.length}</span>
     </a>
@@ -43,22 +45,26 @@ const createFilmCardView = (filmCard) => {
 };
 
 export default class FilmCardView {
+  #element = null;
+  #filmCard = null;
+
   constructor(filmCard) {
-    this.filmCard = filmCard;
+    this.#filmCard = filmCard;
   }
 
-  getTemplate() {
-    return createFilmCardView(this.filmCard);
+  get template() {
+    return createFilmCardView(this.#filmCard);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {
-    this.element = null;
+    this.#element = null;
   }
+
 }

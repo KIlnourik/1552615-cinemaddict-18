@@ -21,7 +21,41 @@ const getRandomFloat = (min, max, numbsAfterPoint) =>{
   return (Math.random() * (max - min + 1) + min).toFixed(numbsAfterPoint);
 };
 
-const humanizeYear = (date) => dayjs(date).format('YYYY');
-const humanizeDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
+const generateRandomElement = (arr) => arr[getRandomInteger(0, arr.length - 1)];
 
-export {getRandomInteger, getRandomFloat, humanizeDate, humanizeYear};
+const getPoster = (filmTitle, obj) => {
+  if (Object.hasOwn(obj, filmTitle)) {
+    return obj[filmTitle];
+  }
+  return null;
+};
+
+const getArrayFromRandomElements = (arr) => {
+  const randomInt = getRandomInteger(1, arr.length - 1);
+  const randomLengthArray = new Array(randomInt).fill(null).map(() => generateRandomElement(arr));
+  return Array.from(new Set(randomLengthArray));
+};
+
+const getRuntimeInHours = (runtime) => {
+  const hours = Math.trunc(runtime / 60);
+  if (hours === 0) {
+    return `${runtime % 60}m`;
+  }
+  return `${Math.trunc(runtime / 60)}h ${runtime % 60}m`;
+};
+
+const humanizeYear = (date) => dayjs(date).format('YYYY');
+const humanizeCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
+const humanizeReleaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
+
+export {
+  getRandomInteger,
+  getRandomFloat,
+  generateRandomElement,
+  getPoster,
+  getRuntimeInHours,
+  getArrayFromRandomElements,
+  humanizeCommentDate,
+  humanizeReleaseDate,
+  humanizeYear
+};

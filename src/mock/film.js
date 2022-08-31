@@ -14,29 +14,29 @@ const generateDate = () => {
 };
 
 export const generateFilmCard = () => ({
-  'id': getRandomInteger,
-  'comments': [],
-  'film_info': {
-    'title': generateRandomElement(Object.keys(TITLES_AND_POSTERS)),
-    'alternativeTitle': null,
-    'totalRating': getRandomFloat(MIN_RATING_VALUE, MAX_RATING_VALUE, 1),
-    'poster': null,
-    'ageRating': generateRandomElement(AGE_RATINGS),
-    'director': generateRandomElement(DIRECTORS),
-    'writers': getArrayFromRandomElements(WRITERS),
-    'actors': getArrayFromRandomElements(ACTORS),
-    'release': {
-      'date': generateDate(),
-      'release_country': null,
+  id: getRandomInteger,
+  comments: [],
+  filmInfo: {
+    title: generateRandomElement(Object.keys(TITLES_AND_POSTERS)),
+    alternativeTitle: null,
+    totalRating: getRandomFloat(MIN_RATING_VALUE, MAX_RATING_VALUE, 1),
+    poster: null,
+    ageRating: generateRandomElement(AGE_RATINGS),
+    director: generateRandomElement(DIRECTORS),
+    writers: getArrayFromRandomElements(WRITERS),
+    actors: getArrayFromRandomElements(ACTORS),
+    release: {
+      date: generateDate(),
+      releaseCountry: null,
     },
-    'runtime': getRandomInteger(MIN_RATING_VALUE, MAX_COMMENT_COUNT),
-    'genre': [GENRES[getRandomInteger(0, GENRES.length - 1)]],
-    'description': generateRandomElement(DESCRIPTIONS),
+    runtime: getRandomInteger(MIN_RATING_VALUE, MAX_COMMENT_COUNT),
+    genre: getArrayFromRandomElements(GENRES),
+    description: generateRandomElement(DESCRIPTIONS),
   },
-  'user_details': {
-    'watchlist': false,
-    'alreadey_watched': true,
-    'watchind_date': null,
-    'favourite': false,
+  userDetails: {
+    watchlist: false,
+    alreadeyWatched: true,
+    watchindDate: null,
+    favourite: false,
   },
 });

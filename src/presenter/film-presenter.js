@@ -55,7 +55,7 @@ export default class FilmPresenter {
   };
 
   #renderFilms = (filmCard) => {
-    const body = document.querySelector('body');
+    const body = document.body;
     const filmCardComponent = new FilmCardView(filmCard);
     const filmPopup = new FilmPopupView(filmCard);
 
@@ -84,7 +84,7 @@ export default class FilmPresenter {
 
     filmPopup.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
       closePopup();
-      document.removeEventListener('keydown', onEscKeyDown);
+
     });
 
     render(filmCardComponent, this.#filmsListContainer.element);

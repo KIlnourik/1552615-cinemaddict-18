@@ -1,13 +1,15 @@
 // Константы, используемые в проекте
-
 const FILMS_IN_LIST_COUNT = 5;
 const TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT = 2;
 const MAX_DESCRIPTION_LENGTH = 140;
 const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+const MIN_IN_HOUR = 60;
+
+
+// Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
 const MAX_COMMENT_COUNT = 100;
-const MIN_IN_HOUR = 60;
 const TITLES_AND_POSTERS = {
   'Made For Each Other': 'made-for-each-other.png',
   'Sagebrush trail': 'sagebrush-trail.jpg',

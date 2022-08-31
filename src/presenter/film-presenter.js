@@ -25,17 +25,22 @@ export default class FilmPresenter {
   #mostCommentedListContainer = new FilmListContainerView();
   #showMoreButtonComponent = new ShowMoreButtonView();
 
+  #mainContainer = null;
   #filmCardsModel = null;
   #filmCards = [];
   #renderedFilmCardsCount = FILMS_IN_LIST_COUNT;
 
-  init = (mainContainer, filmCardsModel) => {
+  constructor(mainContainer, filmCardsModel) {
+    this.#mainContainer = mainContainer;
     this.#filmCardsModel = filmCardsModel;
+  }
+
+  init = () => {
     this.#filmCards = [...this.#filmCardsModel.filmCards];
 
-    render(new NavView(), mainContainer);
-    render(new FiltersView(), mainContainer);
-    render(this.#filmsContainer, mainContainer);
+    render(new NavView(), this.#mainContainer);
+    render(new FiltersView(), this.#mainContainer);
+    render(this.#filmsContainer, this.#mainContainer);
 
     if (this.#filmCards.length === 0) {
       render(new NoFilmsView(), this.#filmsContainer.element);
@@ -116,6 +121,5 @@ export default class FilmPresenter {
 
     render(filmCardComponent, this.#filmsListContainer.element);
   };
-
 
 }

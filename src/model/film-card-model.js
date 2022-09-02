@@ -1,9 +1,9 @@
 import { generateFilmCard } from '../mock/film.js';
-import { FILMS_IN_LIST_COUNT } from '../const.js';
+import { MAX_DAYS_GAP } from '../const.js';
 
 export default class FilmCardModel {
 
-  #filmCards = Array.from({length: FILMS_IN_LIST_COUNT}, generateFilmCard);
+  #filmCards = Array.from({length: MAX_DAYS_GAP}, generateFilmCard);
 
   get filmCards () {
     return this.#filmCards;

@@ -14,15 +14,11 @@ const createFilmPopupView = (filmCard) => {
     release,
     runtime,
     genre,
-    description} = filmCard.film_info;
+    description} = filmCard.filmInfo;
 
   const filmPoster = getPoster(title, TITLES_AND_POSTERS);
 
-  const showGenres = (arr) => {
-    for (const el in arr) {
-      return `<span class="film-details__genre">${el}</span>`;
-    }
-  };
+  const showGenres = (arr) => arr.map((el) => `<span class="film-details__genre">${el}</span>`).join(' ');
 
   return `
   <section class="film-details">
@@ -72,7 +68,7 @@ const createFilmPopupView = (filmCard) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
-            <td class="film-details__cell">${release.release_country}</td>
+            <td class="film-details__cell">${release.releaseCountry}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Genres</td>

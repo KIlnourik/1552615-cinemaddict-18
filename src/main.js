@@ -7,11 +7,12 @@ import FilmCardModel from './model/film-card-model.js';
 const siteHeader = document.querySelector('.header');
 const siteFooterStatistic = document.querySelector('.footer__statistics');
 const siteMainElement = document.querySelector('.main');
-const filmPresenter = new FilmPresenter();
+
 const filmCardsModel = new FilmCardModel();
+const filmPresenter = new FilmPresenter(siteMainElement, filmCardsModel);
 
 render(new UserRankView(), siteHeader);
 
-filmPresenter.init(siteMainElement, filmCardsModel);
+filmPresenter.init();
 
 render(new StatisticView(), siteFooterStatistic);

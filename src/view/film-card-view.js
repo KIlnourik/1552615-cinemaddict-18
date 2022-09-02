@@ -4,7 +4,7 @@ import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../cons
 import CommentModel from '../model/comment-model.js';
 
 const createFilmCardView = (filmCard) => {
-  const { title, totalRating, release, runtime, genre, description } = filmCard.film_info;
+  const { title, totalRating, release, runtime, genre, description } = filmCard.filmInfo;
 
   const year = release.date !== null
     ? humanizeYear(release.date)

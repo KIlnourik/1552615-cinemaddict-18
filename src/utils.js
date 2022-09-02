@@ -1,4 +1,7 @@
 import dayjs from 'dayjs';
+import { MIN_IN_HOUR } from './const.js';
+
+// Функции для получения моковых данных
 
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
@@ -36,12 +39,14 @@ const getArrayFromRandomElements = (arr) => {
   return Array.from(new Set(randomLengthArray));
 };
 
+// Функции применяемые в проекте
+
 const getRuntimeInHours = (runtime) => {
-  const hours = Math.trunc(runtime / 60);
+  const hours = Math.trunc(runtime / MIN_IN_HOUR);
   if (hours === 0) {
-    return `${runtime % 60}m`;
+    return `${runtime % MIN_IN_HOUR}m`;
   }
-  return `${Math.trunc(runtime / 60)}h ${runtime % 60}m`;
+  return `${Math.trunc(runtime / MIN_IN_HOUR)}h ${runtime % MIN_IN_HOUR}m`;
 };
 
 const humanizeYear = (date) => dayjs(date).format('YYYY');

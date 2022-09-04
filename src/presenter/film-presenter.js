@@ -68,12 +68,11 @@ export default class FilmPresenter {
 
     if (this.#filmCards.length > FILMS_IN_LIST_COUNT) {
       render(this.#showMoreButtonComponent, this.#filmsList.element);
-      this.#showMoreButtonComponent.element.addEventListener('click', this.#handlerShowMoreButtonClick);
+      this.#showMoreButtonComponent.setClickHandler(this.#handlerShowMoreButtonClick);
     }
   };
 
-  #handlerShowMoreButtonClick = (evt) => {
-    evt.preventDefault();
+  #handlerShowMoreButtonClick = () => {
     this.#filmCards
       .slice(this.#renderedFilmCardsCount, this.#renderedFilmCardsCount + FILMS_IN_LIST_COUNT)
       .forEach((filmCard) => this.#renderFilms(filmCard));
@@ -109,14 +108,13 @@ export default class FilmPresenter {
       }
     };
 
-    filmCardComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
+    filmCardComponent.setClickHandler(() => {
       showPopup();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    filmPopup.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+    filmPopup.setClickHandler(() => {
       closePopup();
-
     });
 
     render(filmCardComponent, this.#filmsListContainer.element);

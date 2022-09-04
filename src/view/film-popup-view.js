@@ -1,6 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { TITLES_AND_POSTERS } from '../const.js';
-import { getPoster, getRuntimeInHours, humanizeReleaseDate } from '../utils.js';
+import { getPoster } from '../utils/mocks.js';
+import {getRuntimeInHours, humanizeReleaseDate } from '../utils/common.js';
 
 const createFilmPopupView = (filmCard) => {
   const {

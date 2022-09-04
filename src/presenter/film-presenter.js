@@ -12,7 +12,7 @@ import FilmPopupView from '../view/film-popup-view.js';
 import NoFilmsView from '../view/no-films-view.js';
 
 import { TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT, FILMS_IN_LIST_COUNT } from '../const.js';
-import { render } from '../framework/render.js';
+import { render, remove } from '../framework/render.js';
 
 
 export default class FilmPresenter {
@@ -80,8 +80,7 @@ export default class FilmPresenter {
     this.#renderedFilmCardsCount += FILMS_IN_LIST_COUNT;
 
     if (this.#renderedFilmCardsCount >= this.#filmCards.length) {
-      this.#showMoreButtonComponent.element.remove();
-      this.#showMoreButtonComponent.removeElement();
+      remove(this.#showMoreButtonComponent);
     }
   };
 

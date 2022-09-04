@@ -1,5 +1,5 @@
 import { generateComment } from '../mock/comment.js';
-import { getRandomInteger } from '../utils.js';
+import { getRandomInteger } from '../utils/mocks.js';
 import { MAX_COMMENT_COUNT } from '../const.js';
 
 export default class CommentModel {

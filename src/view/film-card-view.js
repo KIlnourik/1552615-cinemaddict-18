@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizeYear, getPoster,getRuntimeInHours } from '../utils.js';
+import { humanizeYear, getRuntimeInHours } from '../utils/common.js';
+import { getPoster } from '../utils/mocks';
 import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../const.js';
 import CommentModel from '../model/comment-model.js';
 

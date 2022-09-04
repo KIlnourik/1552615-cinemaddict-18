@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeYear, getPoster,getRuntimeInHours } from '../utils.js';
 import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../const.js';
 import CommentModel from '../model/comment-model.js';
@@ -44,27 +44,15 @@ const createFilmCardView = (filmCard) => {
   </article>`;
 };
 
-export default class FilmCardView {
-  #element = null;
+export default class FilmCardView extends AbstractView{
   #filmCard = null;
 
   constructor(filmCard) {
+    super();
     this.#filmCard = filmCard;
   }
 
   get template() {
     return createFilmCardView(this.#filmCard);
   }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
-
 }

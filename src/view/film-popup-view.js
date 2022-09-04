@@ -1,5 +1,5 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import { TITLES_AND_POSTERS } from '../const.js';
-import {createElement} from '../render.js';
 import { getPoster, getRuntimeInHours, humanizeReleaseDate } from '../utils.js';
 
 const createFilmPopupView = (filmCard) => {
@@ -184,26 +184,15 @@ const createFilmPopupView = (filmCard) => {
 };
 
 
-export default class FilmPopupView {
+export default class FilmPopupView extends AbstractView{
   #filmCard = null;
-  #element = null;
 
   constructor(filmCard) {
+    super();
     this.#filmCard = filmCard;
   }
 
   get template() {
     return createFilmPopupView(this.#filmCard);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

@@ -12,7 +12,7 @@ import FilmPopupView from '../view/film-popup-view.js';
 import NoFilmsView from '../view/no-films-view.js';
 
 import { TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT, FILMS_IN_LIST_COUNT } from '../const.js';
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 
 
 export default class FilmPresenter {

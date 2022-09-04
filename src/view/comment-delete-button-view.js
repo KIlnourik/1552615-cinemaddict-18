@@ -1,24 +1,12 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createCommentDeleteButtonView = () => `
 <button class="film-details__comment-delete">Delete</button>
 `;
 
-export default class CommentDeleteButtonView {
-  #element = null;
+export default class CommentDeleteButtonView extends AbstractView{
 
   get template () {
     return createCommentDeleteButtonView ();
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

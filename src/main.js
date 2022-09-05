@@ -1,6 +1,6 @@
 import UserRankView from './view/user-rank-view.js';
 import StatisticView from './view/statistic-view.js';
-import { render } from './render.js';
+import { render } from './framework/render.js';
 import FilmPresenter from './presenter/film-presenter.js';
 import FilmCardModel from './model/film-card-model.js';
 

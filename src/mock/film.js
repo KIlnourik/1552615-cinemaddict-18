@@ -1,6 +1,5 @@
-import { getRandomInteger, getRandomFloat, generateRandomElement, getArrayFromRandomElements } from '../utils.js';
-import { MIN_RATING_VALUE, MAX_RATING_VALUE, GENRES, TITLES_AND_POSTERS, MAX_DAYS_GAP,MAX_COMMENT_COUNT, WRITERS, AGE_RATINGS, DIRECTORS, ACTORS } from '../const.js';
-import { DESCRIPTIONS } from '../const.js';
+import { getRandomInteger, getRandomFloat, generateRandomElement, getArrayFromRandomElements } from '../utils/mocks.js';
+import { MIN_RATING_VALUE, MAX_RATING_VALUE, GENRES, TITLES_AND_POSTERS, MAX_DAYS_GAP,MAX_COMMENT_COUNT, WRITERS, AGE_RATINGS, DIRECTORS, ACTORS,DESCRIPTIONS } from '../const.js';
 import dayjs from 'dayjs';
 
 const generateDate = () => {

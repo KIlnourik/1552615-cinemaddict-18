@@ -1,4 +1,4 @@
-import { getRandomInteger, generateRandomElement } from '../utils.js';
+import { getRandomInteger, generateRandomElement } from '../utils/mocks.js';
 import { EMOTIONS, DESCRIPTIONS } from '../const.js';
 
 export const generateComment = () => ({

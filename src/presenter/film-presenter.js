@@ -68,11 +68,11 @@ export default class FilmPresenter {
 
     if (this.#filmCards.length > FILMS_IN_LIST_COUNT) {
       render(this.#showMoreButtonComponent, this.#filmsList.element);
-      this.#showMoreButtonComponent.setClickHandler(this.#handlerShowMoreButtonClick);
+      this.#showMoreButtonComponent.setClickHandler(this.#showMoreButtonClickHandler);
     }
   };
 
-  #handlerShowMoreButtonClick = () => {
+  #showMoreButtonClickHandler = () => {
     this.#filmCards
       .slice(this.#renderedFilmCardsCount, this.#renderedFilmCardsCount + FILMS_IN_LIST_COUNT)
       .forEach((filmCard) => this.#renderFilms(filmCard));

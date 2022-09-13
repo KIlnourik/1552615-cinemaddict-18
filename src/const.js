@@ -4,12 +4,23 @@ const TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT = 2;
 const MAX_DESCRIPTION_LENGTH = 140;
 const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 const MIN_IN_HOUR = 60;
-
+const USER_RATING_RANGE = {
+  'Novice': [1, 10],
+  'Fan': [11, 20],
+  'Movie buff': 21,
+};
+const FilterType = {
+  ALL: 'All movies',
+  WATCHLIST: 'Watchlist',
+  HISTORY: 'History',
+  FAVORITES: 'Favorites',
+};
 
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
 const MAX_COMMENT_COUNT = 100;
+const MAX_FILM_COUNT = 25;
 const TITLES_AND_POSTERS = {
   'Made For Each Other': 'made-for-each-other.png',
   'Sagebrush trail': 'sagebrush-trail.jpg',
@@ -57,7 +68,9 @@ export {
   MIN_RATING_VALUE,
   MAX_RATING_VALUE,
   MAX_COMMENT_COUNT,
+  MAX_FILM_COUNT,
   MIN_IN_HOUR,
+  FilterType,
   TITLES_AND_POSTERS,
   GENRES,
   AGE_RATINGS,
@@ -66,5 +79,6 @@ export {
   ACTORS,
   UNKNOWN_YEAR,
   MAX_DAYS_GAP,
-  DESCRIPTIONS
+  DESCRIPTIONS,
+  USER_RATING_RANGE
 };

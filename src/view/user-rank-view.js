@@ -1,13 +1,16 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { USER_RATING_RANGE } from '../const.js';
+import { watchedFilmsFilter } from '../utils/common.js';
 
 
 const getUserRating = (filmCards) => {
   let userRating = '';
+  const watchedFilmsCount = watchedFilmsFilter(filmCards);
+
   for (const rating in USER_RATING_RANGE) {
-    if (USER_RATING_RANGE[rating] <= filmCards.length) {
+    if (USER_RATING_RANGE[rating] <= watchedFilmsCount) {
       userRating = rating;
-    } else if (USER_RATING_RANGE[rating][0] <= filmCards.length && filmCards.length <= USER_RATING_RANGE[rating][1]) {
+    } else if (USER_RATING_RANGE[rating][0] <= watchedFilmsCount && watchedFilmsCount <= USER_RATING_RANGE[rating][1]) {
       userRating = rating;
     }
   }

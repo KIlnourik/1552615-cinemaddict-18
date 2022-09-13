@@ -23,6 +23,8 @@ const filter = {
 
 const commentFilter = (filmCard, comments) => comments.filter((comment) => filmCard.comments.includes(comment.id));
 
+const watchedFilmsFilter = (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.alreadyWatched).length;
+
 export {
   getRuntimeInHours,
   humanizeCommentDate,
@@ -30,5 +32,5 @@ export {
   humanizeYear,
   filter,
   commentFilter,
-
+  watchedFilmsFilter
 };

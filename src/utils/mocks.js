@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import { MAX_DAYS_GAP } from '../const.js';
+
 // Функции для получения моковых данных
 
 // Функция из интернета по генерации случайного числа из диапазона
@@ -36,10 +39,21 @@ const getArrayFromRandomElements = (arr) => {
   return Array.from(new Set(randomLengthArray));
 };
 
+const generateDate = () => {
+  const isDate = Boolean(getRandomInteger(0, 1));
+  if (!isDate) {
+    return null;
+  }
+
+  const daysGap = getRandomInteger(-MAX_DAYS_GAP, MAX_DAYS_GAP);
+  return dayjs().add(daysGap, 'year').toDate();
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
   generateRandomElement,
   getPoster,
   getArrayFromRandomElements,
+  generateDate
 };

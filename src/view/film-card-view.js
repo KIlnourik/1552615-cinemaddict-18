@@ -2,7 +2,6 @@ import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeYear, getRuntimeInHours } from '../utils/common.js';
 import { getPoster } from '../utils/mocks';
 import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../const.js';
-import CommentModel from '../model/comment-model.js';
 
 const createFilmCardView = (filmCard) => {
   const { title, totalRating, release, runtime, genre, description } = filmCard.filmInfo;
@@ -20,9 +19,6 @@ const createFilmCardView = (filmCard) => {
     return descString;
   };
 
-  const commentModel = new CommentModel();
-  const commentsFromModel = [...commentModel.comments];
-
   return `
   <article class="film-card">
     <a class="film-card__link">
@@ -35,7 +31,7 @@ const createFilmCardView = (filmCard) => {
       </p>
       <img src="./images/posters/${filmPoster}" alt="" class="film-card__poster">
       <p class="film-card__description">${getDescription(description, MAX_DESCRIPTION_LENGTH)}</p>
-      <span class="film-card__comments">${commentsFromModel.length}</span>
+      <span class="film-card__comments">${filmCard.comments.length}</span>
     </a>
     <div class="film-card__controls">
       <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>

@@ -7,7 +7,7 @@ const getUserRating = (filmCards) => {
   const watchedFilmsCount = watchedFilmsFilter(filmCards);
 
   for (const rating in UserRatings) {
-    if (UserRatings[rating].min <= watchedFilmsCount && watchedFilmsCount <= UserRatings[rating].max) {
+    if ((UserRatings[rating].min <= watchedFilmsCount && watchedFilmsCount <= UserRatings[rating].max) || (UserRatings[rating].min <= watchedFilmsCount && UserRatings[rating].max === null) || (UserRatings[rating].min === null && watchedFilmsCount <= UserRatings[rating].max)) {
       return UserRatings[rating].rating;
     }
   }

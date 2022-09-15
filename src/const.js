@@ -18,7 +18,7 @@ const UserRatings = {
   MOVIE_BUFF: {
     rating: 'Movie buff',
     min: 21,
-    max: Infinity,
+    max: null,
   }
 };
 const FilterType = {

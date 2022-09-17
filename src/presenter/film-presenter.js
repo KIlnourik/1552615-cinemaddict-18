@@ -8,7 +8,6 @@ import SortFiltersView from '../view/sort-filters-view.js';
 import FilmCardView from '../view/film-card-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
-import FilmPopupView from '../view/film-popup-view.js';
 import NoFilmsView from '../view/no-films-view.js';
 
 import { TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT, FILMS_IN_LIST_COUNT } from '../const.js';
@@ -16,6 +15,7 @@ import { render, remove } from '../framework/render.js';
 
 import { generateFilter } from '../mock/filter.js';
 import { commentFilter } from '../utils/common.js';
+import FilmCardPresenter from './film-card-presenter.js';
 
 export default class FilmPresenter {
   #filmsContainer = new FilmsView();
@@ -128,38 +128,8 @@ export default class FilmPresenter {
   };
 
   #renderFilms = (filmCard, filmComments) => {
-    const body = document.body;
-    const filmCardComponent = new FilmCardView(filmCard);
-    const filmPopup = new FilmPopupView(filmCard, filmComments);
-
-    const showPopup = () => {
-      body.appendChild(filmPopup.element);
-      body.classList.add('hide-overflow');
-    };
-
-    const closePopup = () => {
-      body.removeChild(filmPopup.element);
-      body.classList.remove('hide-overflow');
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        closePopup();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    filmCardComponent.setClickHandler(() => {
-      showPopup();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    filmPopup.setClickHandler(() => {
-      closePopup();
-    });
-
-    render(filmCardComponent, this.#filmsListContainer.element);
+    const filmCardPresenter = new FilmCardPresenter(this.#filmsListContainer.element);
+    filmCardPresenter.init(filmCard, filmComments);
   };
 
 }

@@ -54,6 +54,20 @@ const getTheTwoMostFilms = (filmCards, parameter) => {
   }
 };
 
+const updateFilmCard = (filmCards, update) => {
+  const index = filmCards.findIndex((filmCard) => filmCard.id === update.id);
+
+  if (index === -1) {
+    return filmCards;
+  }
+
+  return [
+    ...filmCards.slice(0, index),
+    update,
+    ...filmCards.slice(index + 1)
+  ];
+};
+
 export {
   getRuntimeInHours,
   humanizeCommentDate,
@@ -63,4 +77,5 @@ export {
   commentFilter,
   watchedFilmsFilter,
   getTheTwoMostFilms,
+  updateFilmCard,
 };

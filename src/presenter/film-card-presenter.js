@@ -15,13 +15,12 @@ export default class FilmCardPresenter {
     this.#filmsListContainer = filmsListContainer;
   }
 
-
   init = (filmCard, filmComments) => {
     this.#filmCard = filmCard;
     this.#filmComments = filmComments;
 
-    this.#filmCardComponent = new FilmCardView(filmCard);
-    this.#filmPopup = new FilmPopupView(filmCard, filmComments);
+    this.#filmCardComponent = new FilmCardView(this.#filmCard);
+    this.#filmPopup = new FilmPopupView(this.#filmCard, this.#filmComments);
 
 
     this.#filmCardComponent.setClickHandler(() => {

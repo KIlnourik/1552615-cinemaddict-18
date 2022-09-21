@@ -28,6 +28,11 @@ const FilterType = {
   FAVORITES: 'Favorites',
 };
 
+const Mode = {
+  CLOSED: 'CLOSED',
+  OPENED: 'OPENED',
+};
+
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
@@ -92,5 +97,6 @@ export {
   UNKNOWN_YEAR,
   MAX_DAYS_GAP,
   DESCRIPTIONS,
-  UserRatings
+  UserRatings,
+  Mode
 };

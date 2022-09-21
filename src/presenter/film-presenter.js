@@ -10,7 +10,7 @@ import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmsView from '../view/no-films-view.js';
 
 import { TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT, FILMS_IN_LIST_COUNT } from '../const.js';
-import { render, remove } from '../framework/render.js';
+import { render, remove} from '../framework/render.js';
 
 import { generateFilter } from '../mock/filter.js';
 import { commentFilter, getTheTwoMostFilms, updateFilmCard } from '../utils/common.js';
@@ -55,9 +55,13 @@ export default class FilmPresenter {
     this.#renderFilmList();
   };
 
-  #handleFilmCardChange = (updatedFilmCard) => {
+  #filmCardChangeHandler = (updatedFilmCard) => {
     this.#filmCards = updateFilmCard(this.#filmCards, updatedFilmCard);
-    this.#filmCardPresenter.get(updatedFilmCard.id).init(updatedFilmCard);
+    this.#filmCardPresenter.get(updatedFilmCard.id).init(updatedFilmCard, commentFilter(updatedFilmCard, this.#filmComments));
+  };
+
+  #popupChangeHandler = () => {
+    this.#filmCardPresenter.map((presenter) => presenter.changePopup());
   };
 
   #showMoreButtonClickHandler = () => {
@@ -117,9 +121,8 @@ export default class FilmPresenter {
     }
   };
 
-
   #renderFilms = (filmCard, filmComments, container) => {
-    const filmCardPresenter = new FilmCardPresenter(container);
+    const filmCardPresenter = new FilmCardPresenter(container, this.#filmCardChangeHandler, this.#popupChangeHandler);
     filmCardPresenter.init(filmCard, commentFilter(filmCard, filmComments));
     this.#filmCardPresenter.set(filmCard.id, filmCardPresenter);
   };
@@ -150,5 +153,4 @@ export default class FilmPresenter {
     this.#renderedFilmCardsCount = FILMS_IN_LIST_COUNT;
     remove(this.#showMoreButtonComponent);
   };
-
 }

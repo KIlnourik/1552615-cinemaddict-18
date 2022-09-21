@@ -68,6 +68,8 @@ const updateFilmCard = (filmCards, update) => {
   ];
 };
 
+const setActiveClass = (value, activeClass) => (value) ? activeClass : '';
+
 export {
   getRuntimeInHours,
   humanizeCommentDate,
@@ -78,4 +80,5 @@ export {
   watchedFilmsFilter,
   getTheTwoMostFilms,
   updateFilmCard,
+  setActiveClass,
 };

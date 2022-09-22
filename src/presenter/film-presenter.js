@@ -60,10 +60,6 @@ export default class FilmPresenter {
     this.#filmCardPresenter.get(updatedFilmCard.id).init(updatedFilmCard, commentFilter(updatedFilmCard, this.#filmComments));
   };
 
-  #popupChangeHandler = () => {
-    this.#filmCardPresenter.map((presenter) => presenter.changePopup());
-  };
-
   #showMoreButtonClickHandler = () => {
     this.#filmCards
       .slice(this.#renderedFilmCardsCount, this.#renderedFilmCardsCount + FILMS_IN_LIST_COUNT)
@@ -122,7 +118,7 @@ export default class FilmPresenter {
   };
 
   #renderFilms = (filmCard, filmComments, container) => {
-    const filmCardPresenter = new FilmCardPresenter(container, this.#filmCardChangeHandler, this.#popupChangeHandler);
+    const filmCardPresenter = new FilmCardPresenter(container, this.#filmCardChangeHandler);
     filmCardPresenter.init(filmCard, commentFilter(filmCard, filmComments));
     this.#filmCardPresenter.set(filmCard.id, filmCardPresenter);
   };

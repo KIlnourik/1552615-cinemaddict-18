@@ -11,13 +11,11 @@ export default class FilmCardPresenter {
   #filmCard = null;
   #filmComments = null;
   #prevFilmPopup = null;
-  #changePopup = null;
   #body = null;
 
-  constructor(filmsListContainer, changeData, changePopup) {
+  constructor(filmsListContainer, changeData) {
     this.#filmsListContainer = filmsListContainer;
     this.#changeData = changeData;
-    this.#changePopup = changePopup;
   }
 
   init = (filmCard, filmComments) => {
@@ -25,14 +23,13 @@ export default class FilmCardPresenter {
     this.#filmComments = filmComments;
 
     const prevFilmCardComponent = this.#filmCardComponent;
-    this.#body = document.body;
-    this.#prevFilmPopup = this.#filmPopup;
+    const prevFilmPopup = this.#filmPopup;
 
     this.#filmCardComponent = new FilmCardView(this.#filmCard);
     this.#filmPopup = new FilmPopupView(this.#filmCard, this.#filmComments);
 
     this.#filmCardComponent.setClickHandler(() => {
-      this.#showPopup(this.#filmPopup);
+      this.#showPopup();
       document.addEventListener('keydown', this.#escKeyDownHandler);
     });
 
@@ -40,13 +37,6 @@ export default class FilmCardPresenter {
     this.#filmCardComponent.setWatchlistClickHandler(this.#watchlistClickHandler);
     this.#filmCardComponent.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
 
-
-    this.#filmPopup.setClickHandler(() => {
-      this.#closePopup();
-    });
-    this.#filmPopup.setFavoriteClickHandler(this.#favoriteClickHandler);
-    this.#filmPopup.setWatchlistClickHandler(this.#watchlistClickHandler);
-    this.#filmPopup.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
 
     if (prevFilmCardComponent === null) {
       render(this.#filmCardComponent, this.#filmsListContainer);
@@ -57,8 +47,9 @@ export default class FilmCardPresenter {
       replace(this.#filmCardComponent, prevFilmCardComponent);
     }
 
-    if (this.#body.contains(this.#prevFilmPopup.element)) {
-      replace(this.#filmPopup, this.#prevFilmPopup);
+    if (document.body.contains(prevFilmPopup.element)) {
+      this.#closePopup();
+      this.#showPopup();
     }
 
     remove(prevFilmCardComponent);
@@ -69,21 +60,27 @@ export default class FilmCardPresenter {
     remove(this.#filmPopup);
   };
 
-  changePopup = () => {
-    if (this.#body.contains(this.#prevFilmPopup.element)) {
-      remove(this.#prevFilmPopup);
-      render(this.#filmPopup, this.#body);
-    }
-  };
-
   #showPopup = () => {
-    render(this.#filmPopup, this.#body);
-    this.#body.classList.add('hide-overflow');
+    const popup = document.querySelector('.film-details');
+    if (popup) {
+      document.body.removeChild(popup);
+    }
+    render(this.#filmPopup, document.body);
+    document.body.classList.add('hide-overflow');
+
+    this.#filmPopup.setClickHandler(() => {
+      this.#closePopup();
+    });
+
+    this.#filmPopup.setFavoriteClickHandler(this.#favoriteClickHandler);
+    this.#filmPopup.setWatchlistClickHandler(this.#watchlistClickHandler);
+    this.#filmPopup.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
   };
 
   #closePopup = () => {
-    remove(this.#filmPopup, this.#body);
-    this.#body.classList.remove('hide-overflow');
+    remove(this.#filmPopup, document.body);
+    document.body.classList.remove('hide-overflow');
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
   #escKeyDownHandler = (evt) => {

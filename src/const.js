@@ -28,6 +28,8 @@ const FilterType = {
   FAVORITES: 'Favorites',
 };
 
+const POPUP_CLASS = '.film-details';
+
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
@@ -93,4 +95,5 @@ export {
   MAX_DAYS_GAP,
   DESCRIPTIONS,
   UserRatings,
+  POPUP_CLASS
 };

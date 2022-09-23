@@ -70,6 +70,38 @@ const updateFilmCard = (filmCards, update) => {
 
 const setActiveClass = (value, activeClass) => (value) ? activeClass : '';
 
+const getWeightForNullDate = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+const sortFilmCardsDown = (filmA, filmB) => {
+  const weight = getWeightForNullDate(filmA.release.date, filmB.release.date);
+
+  return weight ?? dayjs(filmB.release.date).diff(dayjs(filmA.release.date));
+};
+
+const sortRating = (ratingA, ratingB) => {
+  if (ratingA < ratingB) {
+    return 1;
+  }
+  if (ratingA > ratingB) {
+    return -1;
+  }
+  return 0;
+};
+
 export {
   getRuntimeInHours,
   humanizeCommentDate,
@@ -81,4 +113,6 @@ export {
   getTheTwoMostFilms,
   updateFilmCard,
   setActiveClass,
+  sortFilmCardsDown,
+  sortRating,
 };

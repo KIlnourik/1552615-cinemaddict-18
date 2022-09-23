@@ -9,11 +9,11 @@ import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmsView from '../view/no-films-view.js';
 
-import { TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT, FILMS_IN_LIST_COUNT } from '../const.js';
+import { TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT, FILMS_IN_LIST_COUNT, SortType } from '../const.js';
 import { render, remove} from '../framework/render.js';
 
 import { generateFilter } from '../mock/filter.js';
-import { commentFilter, getTheTwoMostFilms, updateFilmCard } from '../utils/common.js';
+import { commentFilter, getTheTwoMostFilms, updateFilmCard, sortFilmCardsDown, sortRating } from '../utils/common.js';
 import FilmCardPresenter from './film-card-presenter.js';
 
 export default class FilmPresenter {
@@ -41,6 +41,9 @@ export default class FilmPresenter {
 
   #filmCardPresenter = new Map();
 
+  #currentSortType = SortType.DEFAULT;
+  #sourcedFilmCards = [];
+
   constructor(mainContainer, filmCardsModel, commentModel) {
     this.#mainContainer = mainContainer;
     this.#filmCardsModel = filmCardsModel;
@@ -51,12 +54,14 @@ export default class FilmPresenter {
     this.#filmCards = [...this.#filmCardsModel.filmCards];
     this.#filter = generateFilter(this.#filmCards);
     this.#filmComments = [...this.#commentModel.comments];
+    this.#sourcedFilmCards = [...this.#filmCardsModel.filmCards];
 
     this.#renderFilmList();
   };
 
   #filmCardChangeHandler = (updatedFilmCard) => {
     this.#filmCards = updateFilmCard(this.#filmCards, updatedFilmCard);
+    this.#sourcedFilmCards = updateFilmCard(this.#sourcedFilmCards, updatedFilmCard);
     this.#filmCardPresenter.get(updatedFilmCard.id).init(updatedFilmCard, commentFilter(updatedFilmCard, this.#filmComments));
   };
 
@@ -72,6 +77,26 @@ export default class FilmPresenter {
     }
   };
 
+  #sortFilmCards = (sortType) => {
+    switch (sortType) {
+      case SortType.DATE:
+        this.#filmCards.sort(sortFilmCardsDown);
+        break;
+      case SortType.RATING:
+        this.#filmCards.sort(sortRating);
+        break;
+      default:
+        this.#filmCards = [...this.#sourcedFilmCards];
+    }
+  };
+
+  #sortFilterTypeChangeHandler = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortFilmCards(sortType);
+  };
+
   #renderFilters = () => {
     const filterFilmsComponent = new FilmsFiltersView(this.#filter);
     render(filterFilmsComponent, this.#mainContainer);
@@ -79,6 +104,7 @@ export default class FilmPresenter {
 
   #renderSort = () => {
     render(this.#sortFilterComponent, this.#mainContainer);
+    this.#sortFilterComponent.setSortTypeChangeHandler(this.#sortFilterTypeChangeHandler);
   };
 
   #renderNoFilms = () => {

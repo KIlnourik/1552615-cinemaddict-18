@@ -1,5 +1,6 @@
 import { getRandomInteger, getRandomFloat, generateRandomElement, getArrayFromRandomElements, generateDate } from '../utils/mocks.js';
 import { MIN_RATING_VALUE, MAX_RATING_VALUE, GENRES, TITLES_AND_POSTERS,MAX_COMMENT_COUNT, WRITERS, AGE_RATINGS, DIRECTORS, ACTORS,DESCRIPTIONS } from '../const.js';
+import { nanoid } from 'nanoid';
 
 const getArrayFromRandomIntegers = () => {
   const randomArray = Array.from({length: getRandomInteger(0, MAX_COMMENT_COUNT)}, getRandomInteger);
@@ -7,7 +8,7 @@ const getArrayFromRandomIntegers = () => {
 };
 
 export const generateFilmCard = () => ({
-  id: getRandomInteger,
+  id: nanoid(),
   comments: getArrayFromRandomIntegers(),
   filmInfo: {
     title: generateRandomElement(Object.keys(TITLES_AND_POSTERS)),

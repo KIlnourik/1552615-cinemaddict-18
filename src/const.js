@@ -4,10 +4,22 @@ const TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT = 2;
 const MAX_DESCRIPTION_LENGTH = 140;
 const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 const MIN_IN_HOUR = 60;
-const USER_RATING_RANGE = {
-  'Novice': [1, 10],
-  'Fan': [11, 20],
-  'Movie buff': 21,
+const UserRatings = {
+  NOVICE: {
+    rating: 'Novice',
+    min: 1,
+    max: 10,
+  },
+  FAN: {
+    rating: 'Fan',
+    min: 11,
+    max: 20,
+  },
+  MOVIE_BUFF: {
+    rating: 'Movie buff',
+    min: 21,
+    max: null,
+  }
 };
 const FilterType = {
   ALL: 'All movies',
@@ -15,6 +27,8 @@ const FilterType = {
   HISTORY: 'History',
   FAVORITES: 'Favorites',
 };
+
+const POPUP_CLASS = '.film-details';
 
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
@@ -80,5 +94,6 @@ export {
   UNKNOWN_YEAR,
   MAX_DAYS_GAP,
   DESCRIPTIONS,
-  USER_RATING_RANGE
+  UserRatings,
+  POPUP_CLASS
 };

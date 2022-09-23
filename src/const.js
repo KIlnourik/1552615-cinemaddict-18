@@ -34,7 +34,12 @@ const SortType = {
   RATING: 'rating'
 };
 
-const POPUP_CLASS = '.film-details';
+const CLASSES = {
+  POPUP_CLASS: '.film-details',
+  SORT_BUTTON: '.sort__button',
+  ACTIVE_SORT_BUTTON: 'sort__button--active',
+};
+
 
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
@@ -101,6 +106,6 @@ export {
   MAX_DAYS_GAP,
   DESCRIPTIONS,
   UserRatings,
-  POPUP_CLASS,
+  CLASSES,
   SortType,
 };

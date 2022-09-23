@@ -23,7 +23,7 @@ export default class SortFiltersView extends AbstractView {
     if (evt.target.tagName !== 'A') {
       return;
     }
-    this.element.querySelectorAll('.sort__button').forEach((el) => el.classList.remove('sort__button--active'));С
+    this.element.querySelectorAll('.sort__button').forEach((el) => el.classList.remove('sort__button--active'));
     evt.target.classList.add('sort__button--active');
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };

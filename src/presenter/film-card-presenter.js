@@ -11,8 +11,6 @@ export default class FilmCardPresenter {
 
   #filmCard = null;
   #filmComments = null;
-  #prevFilmPopup = null;
-  #body = null;
 
   constructor(filmsListContainer, changeData) {
     this.#filmsListContainer = filmsListContainer;
@@ -79,7 +77,7 @@ export default class FilmCardPresenter {
   };
 
   #closePopup = () => {
-    remove(this.#filmPopup, document.body);
+    remove(this.#filmPopup);
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };

@@ -1,7 +1,7 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
 import { render, remove, replace } from '../framework/render.js';
-import { POPUP_CLASS } from '../const.js';
+import { CLASSES } from '../const.js';
 
 export default class FilmCardPresenter {
   #filmsListContainer = null;
@@ -11,8 +11,6 @@ export default class FilmCardPresenter {
 
   #filmCard = null;
   #filmComments = null;
-  #prevFilmPopup = null;
-  #body = null;
 
   constructor(filmsListContainer, changeData) {
     this.#filmsListContainer = filmsListContainer;
@@ -62,7 +60,7 @@ export default class FilmCardPresenter {
   };
 
   #showPopup = () => {
-    const popup = document.querySelector(POPUP_CLASS);
+    const popup = document.querySelector(CLASSES.POPUP_CLASS);
     if (popup) {
       document.body.removeChild(popup);
     }
@@ -79,7 +77,7 @@ export default class FilmCardPresenter {
   };
 
   #closePopup = () => {
-    remove(this.#filmPopup, document.body);
+    remove(this.#filmPopup);
     document.body.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };

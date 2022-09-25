@@ -25,7 +25,7 @@ const commentFilter = (filmCard, comments) => comments.filter((comment) => filmC
 
 const watchedFilmsFilter = (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.alreadyWatched).length;
 
-const theMostTopRatedFilmSort = (filmCards) => filmCards.slice().sort((a, b) => {
+const theMostTopRatedFilmSort = (filmCards) => filmCards.sort((a, b) => {
   if (a.filmInfo.totalRating < b.filmInfo.totalRating) {
     return 1;
   }
@@ -35,7 +35,7 @@ const theMostTopRatedFilmSort = (filmCards) => filmCards.slice().sort((a, b) => 
   return 0;
 }).slice(0, TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT);
 
-const theMostCommentedFilmSort = (filmCards) => filmCards.slice().sort((a, b) => {
+const theMostCommentedFilmSort = (filmCards) => filmCards.sort((a, b) => {
   if (a.comments.length < b.comments.length) {
     return 1;
   }
@@ -70,6 +70,38 @@ const updateFilmCard = (filmCards, update) => {
 
 const setActiveClass = (value, activeClass) => (value) ? activeClass : '';
 
+const getWeightForNullDate = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
+
+const sortFilmCardsDown = (filmA, filmB) => {
+  const weight = getWeightForNullDate(filmA.filmInfo.release.date, filmB.filmInfo.release.date);
+
+  return weight ?? dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
+};
+
+const sortRating = (filmA, filmB) => {
+  if (filmA.filmInfo.totalRating < filmB.filmInfo.totalRating) {
+    return 1;
+  }
+  if (filmA.filmInfo.totalRating > filmB.filmInfo.totalRating) {
+    return -1;
+  }
+  return 0;
+};
+
 export {
   getRuntimeInHours,
   humanizeCommentDate,
@@ -81,4 +113,6 @@ export {
   getTheTwoMostFilms,
   updateFilmCard,
   setActiveClass,
+  sortFilmCardsDown,
+  sortRating,
 };

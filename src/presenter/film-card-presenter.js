@@ -1,7 +1,7 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
 import { render, remove, replace } from '../framework/render.js';
-import { CLASSES } from '../const.js';
+import { Classes } from '../const.js';
 
 export default class FilmCardPresenter {
   #filmsListContainer = null;
@@ -60,7 +60,7 @@ export default class FilmCardPresenter {
   };
 
   #showPopup = () => {
-    const popup = document.querySelector(CLASSES.POPUP_CLASS);
+    const popup = document.querySelector(Classes.POPUP_CLASS);
     if (popup) {
       document.body.removeChild(popup);
     }

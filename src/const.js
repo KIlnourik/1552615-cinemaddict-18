@@ -34,7 +34,7 @@ const SortType = {
   RATING: 'rating'
 };
 
-const CLASSES = {
+const Classes = {
   POPUP_CLASS: '.film-details',
   SORT_BUTTON: '.sort__button',
   ACTIVE_SORT_BUTTON: 'sort__button--active',
@@ -106,6 +106,6 @@ export {
   MAX_DAYS_GAP,
   DESCRIPTIONS,
   UserRatings,
-  CLASSES,
+  Classes,
   SortType,
 };

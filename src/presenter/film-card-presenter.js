@@ -2,6 +2,7 @@ import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
 import { render, remove, replace } from '../framework/render.js';
 import { Classes } from '../const.js';
+import { commentFilter } from '../utils/common.js';
 
 export default class FilmCardPresenter {
   #filmsListContainer = null;
@@ -25,7 +26,7 @@ export default class FilmCardPresenter {
     const prevFilmPopup = this.#filmPopup;
 
     this.#filmCardComponent = new FilmCardView(this.#filmCard);
-    this.#filmPopup = new FilmPopupView(this.#filmCard, this.#filmComments);
+    this.#filmPopup = new FilmPopupView(this.#filmCard, commentFilter(this.#filmCard, this.#filmComments));
 
     this.#filmCardComponent.setClickHandler(() => {
       this.#showPopup();
@@ -79,6 +80,7 @@ export default class FilmCardPresenter {
   #closePopup = () => {
     remove(this.#filmPopup);
     document.body.classList.remove('hide-overflow');
+    this.#filmPopup.reset(this.#filmCard, commentFilter(this.#filmCard, this.#filmComments));
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 

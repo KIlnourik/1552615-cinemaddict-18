@@ -2,7 +2,7 @@
 const FILMS_IN_LIST_COUNT = 5;
 const TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT = 2;
 const MAX_DESCRIPTION_LENGTH = 140;
-const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+
 const MIN_IN_HOUR = 60;
 const UserRatings = {
   NOVICE: {
@@ -40,12 +40,19 @@ const Classes = {
   ACTIVE_SORT_BUTTON: 'sort__button--active',
 };
 
+const Emojis = {
+  SMILE: 'smile',
+  SLEEPING: 'sleeping',
+  PUKE: 'puke',
+  ANGRY: 'angry',
+};
 
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
 const MAX_COMMENT_COUNT = 100;
 const MAX_FILM_COUNT = 25;
+const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 const TITLES_AND_POSTERS = {
   'Made For Each Other': 'made-for-each-other.png',
   'Sagebrush trail': 'sagebrush-trail.jpg',
@@ -108,4 +115,5 @@ export {
   UserRatings,
   Classes,
   SortType,
+  Emojis
 };

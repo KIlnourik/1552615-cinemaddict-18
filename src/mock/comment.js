@@ -1,9 +1,8 @@
 import { getRandomInteger, generateRandomElement, getArrayFromRandomElements, generateDate } from '../utils/mocks.js';
 import { EMOTIONS, DESCRIPTIONS, WRITERS } from '../const.js';
-import { nanoid } from 'nanoid';
 
 export const generateComment = () => ({
-  id: nanoid(),
+  id: getRandomInteger(0, 100),
   author: getArrayFromRandomElements(WRITERS),
   comment: generateRandomElement(DESCRIPTIONS),
   date: generateDate(),

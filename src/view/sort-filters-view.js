@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { SortType, CLASSES } from '../const.js';
+import { SortType, Classes } from '../const.js';
 
 const createSortFiltersView = () => `
 <ul class="sort">
@@ -23,8 +23,8 @@ export default class SortFiltersView extends AbstractView {
     if (evt.target.tagName !== 'A') {
       return;
     }
-    this.element.querySelectorAll(CLASSES.SORT_BUTTON).forEach((el) => el.classList.remove(CLASSES.ACTIVE_SORT_BUTTON));
-    evt.target.classList.add(CLASSES.ACTIVE_SORT_BUTTON);
+    this.element.querySelectorAll(Classes.SORT_BUTTON).forEach((el) => el.classList.remove(Classes.ACTIVE_SORT_BUTTON));
+    evt.target.classList.add(Classes.ACTIVE_SORT_BUTTON);
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   };
 

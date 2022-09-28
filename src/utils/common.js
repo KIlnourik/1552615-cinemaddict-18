@@ -86,13 +86,13 @@ const getWeightForNullDate = (dateA, dateB) => {
   return null;
 };
 
-const sortFilmCardsDown = (filmA, filmB) => {
+const sortByDate = (filmA, filmB) => {
   const weight = getWeightForNullDate(filmA.filmInfo.release.date, filmB.filmInfo.release.date);
 
   return weight ?? dayjs(filmB.filmInfo.release.date).diff(dayjs(filmA.filmInfo.release.date));
 };
 
-const sortRating = (filmA, filmB) => {
+const sortByRating = (filmA, filmB) => {
   if (filmA.filmInfo.totalRating < filmB.filmInfo.totalRating) {
     return 1;
   }
@@ -113,6 +113,6 @@ export {
   getTheTwoMostFilms,
   updateFilmCard,
   setActiveClass,
-  sortFilmCardsDown,
-  sortRating,
+  sortByDate,
+  sortByRating,
 };

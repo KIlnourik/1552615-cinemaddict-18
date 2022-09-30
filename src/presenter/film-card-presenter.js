@@ -1,7 +1,7 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
 import { render, remove, replace } from '../framework/render.js';
-import { Classes } from '../const.js';
+import { Classes, UserAction, UpdateType } from '../const.js';
 import { commentFilter } from '../utils/common.js';
 
 export default class FilmCardPresenter {
@@ -75,6 +75,8 @@ export default class FilmCardPresenter {
     this.#filmPopup.setFavoriteClickHandler(this.#favoriteClickHandler);
     this.#filmPopup.setWatchlistClickHandler(this.#watchlistClickHandler);
     this.#filmPopup.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
+    this.#filmPopup.setAddCommentHandler(this.#commentAddHandler);
+    this.#filmPopup.setDeleteCommentHandler(this.#commentDeleteHandler);
   };
 
   #closePopup = () => {
@@ -93,15 +95,46 @@ export default class FilmCardPresenter {
   };
 
   #favoriteClickHandler = () => {
-    this.#changeData({ ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, favorite: !this.#filmCard.userDetails.favorite } });
+    this.#changeData(
+      UserAction.UPDATE,
+      UpdateType.MINOR,
+      { ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, favorite: !this.#filmCard.userDetails.favorite } });
   };
 
   #watchedClickHandler = () => {
-    this.#changeData({ ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, alreadyWatched: !this.#filmCard.userDetails.alreadyWatched } });
+    this.#changeData(
+      UserAction.UPDATE,
+      UpdateType.MINOR,
+      { ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, alreadyWatched: !this.#filmCard.userDetails.alreadyWatched } });
   };
 
   #watchlistClickHandler = () => {
-    this.#changeData({ ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, watchlist: !this.#filmCard.userDetails.watchlist } });
+    this.#changeData(
+      UserAction.UPDATE,
+      UpdateType.MINOR,
+      { ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, watchlist: !this.#filmCard.userDetails.watchlist } });
   };
+
+  #commentAddHandler = (comment) => {
+    this.filmCard.comments.push(comment.id);
+    const filmCard = this.#filmCard;
+    this.#changeData(
+      UserAction.ADD,
+      UpdateType.PATCH,
+      { comment, filmCard }
+    );
+  };
+
+  #commentDeleteHandler = (commentId) => {
+    const index = this.#filmCard.comments.findIndex((id) => commentId === id);
+    this.#filmCard.comments.splice(index, 1);
+    const filmCard = this.#filmCard;
+    this.#changeData(
+      UserAction.DELETE,
+      UpdateType.PATCH,
+      { commentId, filmCard}
+    );
+  };
+
 
 }

@@ -47,6 +47,18 @@ const Emojis = {
   ANGRY: 'angry',
 };
 
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+const UserAction = {
+  UPDATE: 'UPDATE',
+  ADD: 'ADD',
+  DELETE: 'DELETE',
+};
+
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
@@ -115,5 +127,7 @@ export {
   UserRatings,
   Classes,
   SortType,
-  Emojis
+  Emojis,
+  UpdateType,
+  UserAction,
 };

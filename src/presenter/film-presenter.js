@@ -1,8 +1,6 @@
 
 import FilmsView from '../view/films-view.js';
 import FilmListView from '../view/film-list-view.js';
-// import FilmTopRatedListView from '../view/film-top-rated-view.js';
-// import FilmMostCommentedView from '../view/film-most-commented-view.js';
 import FilmsFiltersView from '../view/films-filters-view.js';
 import SortFiltersView from '../view/sort-filters-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
@@ -13,7 +11,7 @@ import { FILMS_IN_LIST_COUNT, SortType } from '../const.js';
 import { render, remove } from '../framework/render.js';
 
 import { generateFilter } from '../mock/filter.js';
-import { commentFilter, updateFilmCard, sortByDate, sortByRating } from '../utils/common.js';
+import { commentFilter, sortByDate, sortByRating, UpdateType, UserAction } from '../utils/common.js';
 import FilmCardPresenter from './film-card-presenter.js';
 
 export default class FilmPresenter {
@@ -25,11 +23,9 @@ export default class FilmPresenter {
   #mainContainer = null;
   #filmCardsModel = null;
   #commentModel = null;
-  #filmCards = [];
   #renderedFilmCardsCount = FILMS_IN_LIST_COUNT;
 
   #filter = null;
-  #filmComments = [];
 
   #filterFilmsComponent = null;
   #sortFilterComponent = new SortFiltersView();
@@ -37,62 +33,83 @@ export default class FilmPresenter {
   #filmCardPresenter = new Map();
 
   #currentSortType = SortType.DEFAULT;
-  #sourcedFilmCards = [];
 
   constructor(mainContainer, filmCardsModel, commentModel) {
     this.#mainContainer = mainContainer;
     this.#filmCardsModel = filmCardsModel;
     this.#commentModel = commentModel;
+    this.#filmCardsModel.addObserver(this.#modelEventHandler);
+    this.#commentModel.addObserver(this.#modelEventHandler);
+  }
+
+  get filmCards() {
+    switch (this.#currentSortType) {
+      case SortType.DATE:
+        return [...this.#filmCardsModel.filmCards].sort(sortByDate);
+      case SortType.RATING:
+        return [...this.#filmCardsModel.filmCards].sort(sortByRating);
+      default:
+    }
+    return this.#filmCardsModel.filmCards;
+  }
+
+  get comments () {
+    return this.#commentModel.comments;
   }
 
   init = () => {
-    this.#filmCards = [...this.#filmCardsModel.filmCards];
-    this.#filter = generateFilter(this.#filmCards);
-    this.#filmComments = [...this.#commentModel.comments];
-
-    this.#sourcedFilmCards = [...this.#filmCardsModel.filmCards];
+    this.#filter = generateFilter(this.#filmCardsModel.filmCards);
     this.#filterFilmsComponent = new FilmsFiltersView(this.#filter);
 
     this.#renderFilmList();
   };
 
-  #filmCardChangeHandler = (updatedFilmCard) => {
-    this.#filmCards = updateFilmCard(this.#filmCards, updatedFilmCard);
-    this.#sourcedFilmCards = updateFilmCard(this.#sourcedFilmCards, updatedFilmCard);
-    this.#filmCardPresenter.get(updatedFilmCard.id).init(updatedFilmCard, commentFilter(updatedFilmCard, this.#filmComments));
+  #viewActionHandler = (actionType, updateType, update) => {
+    switch (actionType) {
+      case UserAction.UPDATE:
+        this.#filmCardsModel.update(updateType, update);
+        break;
+      case UserAction.ADD:
+        this.#filmCardsModel.add(updateType, update);
+        break;
+      case UserAction.DELETE:
+        this.#filmCardsModel.delete(updateType, update);
+        break;
+    }
   };
 
+  #modelEventHandler = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#filmCardPresenter.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        break;
+      case UpdateType.MAJOR:
+        break;
+    }
+  };
+
+
   #showMoreButtonClickHandler = () => {
-    this.#filmCards
-      .slice(this.#renderedFilmCardsCount, this.#renderedFilmCardsCount + FILMS_IN_LIST_COUNT)
-      .forEach((filmCard) => this.#renderFilms(filmCard, commentFilter(filmCard, this.#filmComments), this.#filmsListContainer.element));
+    const filmCardsCount = this.filmCards.length;
+    this.filmCards
+      .slice(filmCardsCount, this.#renderedFilmCardsCount + FILMS_IN_LIST_COUNT)
+      .forEach((filmCard) => this.#renderFilms(filmCard, commentFilter(filmCard, this.comments), this.#filmsListContainer.element));
 
     this.#renderedFilmCardsCount += FILMS_IN_LIST_COUNT;
 
-    if (this.#renderedFilmCardsCount >= this.#filmCards.length) {
+    if (this.#renderedFilmCardsCount >= filmCardsCount) {
       remove(this.#showMoreButtonComponent);
     }
   };
 
-  #sortFilmCards = (sortType) => {
-    switch (sortType) {
-      case SortType.DATE:
-        this.#filmCards.sort(sortByDate);
-        break;
-      case SortType.RATING:
-        this.#filmCards.sort(sortByRating);
-        break;
-      default:
-        this.#filmCards = [...this.#sourcedFilmCards];
-    }
-    this.#currentSortType = sortType;
-  };
 
   #sortFilterTypeChangeHandler = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#sortFilmCards(sortType);
+    this.#currentSortType = sortType;
     this.#clearFilmList();
     this.#renderFilmList();
   };
@@ -114,8 +131,8 @@ export default class FilmPresenter {
     render(this.#filmsList, this.#filmsContainer.element);
     render(this.#filmsListContainer, this.#filmsList.element);
 
-    for (let i = 0; i < Math.min(this.#filmCards.length, FILMS_IN_LIST_COUNT); i++) {
-      this.#renderFilms(this.#filmCards[i], this.#filmComments, this.#filmsListContainer.element);
+    for (let i = 0; i < Math.min(this.filmCards.length, FILMS_IN_LIST_COUNT); i++) {
+      this.#renderFilms(this.filmCards[i], this.comments, this.#filmsListContainer.element);
     }
   };
 
@@ -130,13 +147,13 @@ export default class FilmPresenter {
     this.#renderSort();
     render(this.#filmsContainer, this.#mainContainer);
 
-    if (this.#filmCards.length === 0) {
+    if (this.filmCards.length === 0) {
       this.#renderNoFilms();
     } else {
       this.#renderFilmCards();
     }
 
-    if (this.#filmCards.length > FILMS_IN_LIST_COUNT) {
+    if (this.filmCards.length > FILMS_IN_LIST_COUNT) {
       this.#renderShowMoreButton();
     }
   };
@@ -149,7 +166,7 @@ export default class FilmPresenter {
   };
 
   #renderFilms = (filmCard, filmComments, container) => {
-    const filmCardPresenter = new FilmCardPresenter(container, this.#filmCardChangeHandler);
+    const filmCardPresenter = new FilmCardPresenter(container, this.#viewActionHandler);
     filmCardPresenter.init(filmCard, commentFilter(filmCard, filmComments));
     this.#filmCardPresenter.set(filmCard.id, filmCardPresenter);
   };

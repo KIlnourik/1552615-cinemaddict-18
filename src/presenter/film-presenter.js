@@ -88,7 +88,7 @@ export default class FilmPresenter {
         this.#renderFilmList();
         break;
       case UpdateType.MAJOR:
-        this.#clearFilmCardsList({resetRenderedFilmCardsCount: true, resetSortType: true});
+        this.#clearFilmList({resetRenderedFilmCardsCount: true, resetSortType: true});
         this.#renderFilmList();
         break;
     }
@@ -165,13 +165,6 @@ export default class FilmPresenter {
     if (this.filmCards.length > this.#renderedFilmCardsCount) {
       this.#renderShowMoreButton();
     }
-  };
-
-  #clearFilmCardsList = () => {
-    this.#filmCardPresenter.forEach((presenter) => presenter.destroy());
-    this.#filmCardPresenter.clear();
-    this.#renderedFilmCardsCount = FILMS_IN_LIST_COUNT;
-    remove(this.#showMoreButtonComponent);
   };
 
   #clearFilmList = ({ resetRenderedFilmCardsCount = false, resetSortType = false } = {}) => {

@@ -1,7 +1,7 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { TITLES_AND_POSTERS, Emojis } from '../const.js';
 import { getPoster } from '../utils/mocks.js';
-import { getRuntimeInHours, humanizeReleaseDate, humanizeCommentDate, setActiveClass } from '../utils/common.js';
+import { getRuntimeInHours, humanizeReleaseDate, humanizeCommentDate, setActiveClass, getRandomInt } from '../utils/common.js';
 
 const isCheckedEmoji = (currentEmoji, emoji) => currentEmoji === emoji ? 'checked' : '';
 
@@ -40,23 +40,21 @@ const createCommentsFormTemplate = (selectedEmoji, comment) => `
         </div>
       </form>`;
 
-const createCommentItemTemplate = (filmComment) => {
-  const { author, comment, date, emotion } = filmComment;
-  return `
+const createCommentItemTemplate = (filmComment) => filmComment ?
+  `
   <li class="film-details__comment">
     <span class="film-details__comment-emoji">
-      <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
+      <img src="./images/emoji/${filmComment.emotion}.png" width="55" height="55" alt="emoji-${filmComment.emotion}">
     </span>
     <div>
-      <p class="film-details__comment-text">${comment}</p>
+      <p class="film-details__comment-text">${filmComment.comment}</p>
       <p class="film-details__comment-info">
-        <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${humanizeCommentDate(date)}</span>
+        <span class="film-details__comment-author">${filmComment.author}</span>
+        <span class="film-details__comment-day">${humanizeCommentDate(filmComment.date)}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
-  </li>`;
-};
+  </li>` : '';
 
 const createCommentsTemplate = (commentsItems) => {
   const commentsItemsTemplate = commentsItems
@@ -193,6 +191,8 @@ export default class FilmPopupView extends AbstractStatefulView {
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setMarkAsWatchedClickHandler(this._callback.markAsWatchedClick);
     this.setWatchlistClickHandler(this._callback.watchlistClick);
+    this.setAddCommentHandler(this._callback.addComment);
+    this.setDeleteClickHandler(this._callback.deleteClick);
   };
 
   setClickHandler = (callback) => {
@@ -215,6 +215,16 @@ export default class FilmPopupView extends AbstractStatefulView {
     this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#markAsWatchedClickHandler);
   };
 
+  setAddCommentHandler = (callback) => {
+    this._callback.addComment = callback;
+    this.element.addEventListener('keydown', this.#addCommentHandler);
+  };
+
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.film-details__comment-delete').addEventListener('click', this.#deleteClickHandler);
+  };
+
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.favoriteClick();
@@ -231,6 +241,28 @@ export default class FilmPopupView extends AbstractStatefulView {
   };
 
   #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
+
+  #addCommentHandler = (evt) => {
+    if (evt.key === 'Enter' && (evt.ctrlKey || evt.metaKey)) {
+      evt.preventDefault();
+      const comment = this._state.comment;
+      const emoji = this._state.emoji;
+
+      const userComment = {
+        id: getRandomInt(99, 99999999),
+        author: 'Movie Buff',
+        comment,
+        date: new Date,
+        emoji,
+      };
+      this._callback.addComment(userComment);
+    }
+  };
+
+  #deleteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.click();
   };

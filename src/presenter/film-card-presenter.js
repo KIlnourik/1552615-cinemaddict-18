@@ -76,7 +76,7 @@ export default class FilmCardPresenter {
     this.#filmPopup.setWatchlistClickHandler(this.#watchlistClickHandler);
     this.#filmPopup.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
     this.#filmPopup.setAddCommentHandler(this.#commentAddHandler);
-    this.#filmPopup.setDeleteCommentHandler(this.#commentDeleteHandler);
+    this.#filmPopup.setDeleteClickHandler(this.#commentDeleteHandler);
   };
 
   #closePopup = () => {

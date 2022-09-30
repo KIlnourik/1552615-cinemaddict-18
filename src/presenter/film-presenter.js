@@ -18,8 +18,8 @@ export default class FilmPresenter {
   #filmsContainer = new FilmsView();
   #filmsList = new FilmListView();
   #filmsListContainer = new FilmListContainerView();
-  #showMoreButtonComponent = new ShowMoreButtonView();
-
+  #showMoreButtonComponent = null;
+  #noFilmCardsComponent = new NoFilmsView();
   #mainContainer = null;
   #filmCardsModel = null;
   #commentModel = null;
@@ -28,7 +28,7 @@ export default class FilmPresenter {
   #filter = null;
 
   #filterFilmsComponent = null;
-  #sortFilterComponent = new SortFiltersView();
+  #sortFilterComponent = null;
 
   #filmCardPresenter = new Map();
 
@@ -53,7 +53,7 @@ export default class FilmPresenter {
     return this.#filmCardsModel.filmCards;
   }
 
-  get comments () {
+  get comments() {
     return this.#commentModel.comments;
   }
 
@@ -84,33 +84,35 @@ export default class FilmPresenter {
         this.#filmCardPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
+        this.#clearFilmList();
+        this.#renderFilmList();
         break;
       case UpdateType.MAJOR:
+        this.#clearFilmCardsList({resetRenderedFilmCardsCount: true, resetSortType: true});
+        this.#renderFilmList();
         break;
     }
   };
 
-
   #showMoreButtonClickHandler = () => {
     const filmCardsCount = this.filmCards.length;
-    this.filmCards
-      .slice(filmCardsCount, this.#renderedFilmCardsCount + FILMS_IN_LIST_COUNT)
-      .forEach((filmCard) => this.#renderFilms(filmCard, commentFilter(filmCard, this.comments), this.#filmsListContainer.element));
+    const newRenderedFilmCardsCount = Math.min(filmCardsCount, this.#renderedFilmCardsCount + FILMS_IN_LIST_COUNT);
+    const filmCards = this.filmCards.slice(this.#renderedFilmCardsCount, newRenderedFilmCardsCount);
+    this.#renderFilmCards(filmCards, this.#commentModel);
 
-    this.#renderedFilmCardsCount += FILMS_IN_LIST_COUNT;
+    this.#renderedFilmCardsCount = newRenderedFilmCardsCount;
 
     if (this.#renderedFilmCardsCount >= filmCardsCount) {
       remove(this.#showMoreButtonComponent);
     }
   };
 
-
   #sortFilterTypeChangeHandler = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
     this.#currentSortType = sortType;
-    this.#clearFilmList();
+    this.#clearFilmList({resetRenderedFilmCardsCount: true});
     this.#renderFilmList();
   };
 
@@ -119,55 +121,78 @@ export default class FilmPresenter {
   };
 
   #renderSort = () => {
-    render(this.#sortFilterComponent, this.#mainContainer);
+    this.#sortFilterComponent = new SortFiltersView();
     this.#sortFilterComponent.setSortTypeChangeHandler(this.#sortFilterTypeChangeHandler);
+    render(this.#sortFilterComponent, this.#mainContainer);
   };
 
   #renderNoFilms = () => {
-    render(new NoFilmsView(), this.#filmsContainer.element);
+    render(this.#noFilmCardsComponent, this.#filmsContainer.element);
   };
 
-  #renderFilmCards = () => {
-    render(this.#filmsList, this.#filmsContainer.element);
-    render(this.#filmsListContainer, this.#filmsList.element);
+  #renderFilmCard = (filmCard, filmComments) => {
+    const filmCardPresenter = new FilmCardPresenter(this.#filmsListContainer.element, this.#viewActionHandler);
+    filmCardPresenter.init(filmCard, commentFilter(filmCard, filmComments));
+    this.#filmCardPresenter.set(filmCard.id, filmCardPresenter);
+  };
 
-    for (let i = 0; i < Math.min(this.filmCards.length, FILMS_IN_LIST_COUNT); i++) {
-      this.#renderFilms(this.filmCards[i], this.comments, this.#filmsListContainer.element);
-    }
+  #renderFilmCards = (filmCards, filmComments) => {
+    filmCards.forEach((filmCard) => this.#renderFilmCard(filmCard, filmComments));
   };
 
   #renderShowMoreButton = () => {
-    render(this.#showMoreButtonComponent, this.#filmsList.element);
+    this.#showMoreButtonComponent = new ShowMoreButtonView();
     this.#showMoreButtonComponent.setClickHandler(this.#showMoreButtonClickHandler);
+    render(this.#showMoreButtonComponent, this.#filmsList.element);
   };
 
   #renderFilmList = () => {
 
+    const filmCards = this.filmCards;
+    const filmCardsCount = filmCards.length;
     this.#renderFilters();
     this.#renderSort();
     render(this.#filmsContainer, this.#mainContainer);
+    render(this.#filmsList, this.#filmsContainer.element);
+    render(this.#filmsListContainer, this.#filmsList.element);
 
     if (this.filmCards.length === 0) {
       this.#renderNoFilms();
-    } else {
-      this.#renderFilmCards();
+      return;
     }
+    this.#renderFilmCards(filmCards.slice(0, Math.min(filmCardsCount, this.#renderedFilmCardsCount)));
 
-    if (this.filmCards.length > FILMS_IN_LIST_COUNT) {
+    if (this.filmCards.length > this.#renderedFilmCardsCount) {
       this.#renderShowMoreButton();
     }
   };
 
-  #clearFilmList = () => {
+  #clearFilmCardsList = () => {
     this.#filmCardPresenter.forEach((presenter) => presenter.destroy());
     this.#filmCardPresenter.clear();
     this.#renderedFilmCardsCount = FILMS_IN_LIST_COUNT;
     remove(this.#showMoreButtonComponent);
   };
 
-  #renderFilms = (filmCard, filmComments, container) => {
-    const filmCardPresenter = new FilmCardPresenter(container, this.#viewActionHandler);
-    filmCardPresenter.init(filmCard, commentFilter(filmCard, filmComments));
-    this.#filmCardPresenter.set(filmCard.id, filmCardPresenter);
+  #clearFilmList = ({ resetRenderedFilmCardsCount = false, resetSortType = false } = {}) => {
+    const filmCardsCount = this.filmCards.length;
+    this.#filmCardPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmCardPresenter.clear();
+    remove(this.#filterFilmsComponent);
+    remove(this.#sortFilterComponent);
+    remove(this.#noFilmCardsComponent);
+    remove(this.#showMoreButtonComponent);
+
+    if (resetRenderedFilmCardsCount) {
+      this.#renderedFilmCardsCount = FILMS_IN_LIST_COUNT;
+    } else {
+      this.#renderedFilmCardsCount = Math.min(filmCardsCount, this.#renderedFilmCardsCount);
+    }
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DEFAULT;
+    }
   };
+
+
 }

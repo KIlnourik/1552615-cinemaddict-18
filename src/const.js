@@ -37,7 +37,6 @@ const SortType = {
 const Classes = {
   POPUP_CLASS: '.film-details',
   SORT_BUTTON: '.sort__button',
-  ACTIVE_SORT_BUTTON: 'sort__button--active',
 };
 
 const Emojis = {

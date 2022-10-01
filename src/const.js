@@ -53,9 +53,9 @@ const UpdateType = {
 };
 
 const UserAction = {
-  UPDATE: 'UPDATE',
-  ADD: 'ADD',
-  DELETE: 'DELETE',
+  UPDATE_FILMCARD: 'UPDATE_FILMCARD',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
 };
 
 // Константы для моковых данных

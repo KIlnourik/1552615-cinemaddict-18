@@ -2,7 +2,7 @@ import { getRandomInteger, generateRandomElement, getArrayFromRandomElements, ge
 import { EMOTIONS, DESCRIPTIONS, WRITERS } from '../const.js';
 
 export const generateComment = () => ({
-  id: getRandomInteger(0, 100),
+  id: getRandomInteger(1, 10),
   author: getArrayFromRandomElements(WRITERS),
   comment: generateRandomElement(DESCRIPTIONS),
   date: generateDate(),

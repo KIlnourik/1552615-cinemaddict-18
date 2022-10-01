@@ -3,7 +3,7 @@ import { MIN_RATING_VALUE, MAX_RATING_VALUE, GENRES, TITLES_AND_POSTERS,MAX_COMM
 import { nanoid } from 'nanoid';
 
 const getArrayFromRandomIntegers = () => {
-  const randomArray = Array.from({length: getRandomInteger(0, MAX_COMMENT_COUNT)}, getRandomInteger);
+  const randomArray = Array.from({length: 10}, getRandomInteger);
   return getArrayFromRandomElements(randomArray);
 };
 

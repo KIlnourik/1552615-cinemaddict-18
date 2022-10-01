@@ -11,6 +11,9 @@ export default class CommentModel extends Observable{
     return this.#comments;
   }
 
+  set comments (comments) {
+    this.#comments = comments;
+  }
 
   addСomment = (updateType, update) => {
     this.#comments = [
@@ -22,7 +25,7 @@ export default class CommentModel extends Observable{
   };
 
   deleteСomment = (updateType, update) => {
-    const index = this.#comments.findIndex((comment) => comment.id === update.id);
+    const index = this.#comments.findIndex((comment) => comment.id === update);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting comment');

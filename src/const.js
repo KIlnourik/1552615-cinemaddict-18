@@ -37,7 +37,6 @@ const SortType = {
 const Classes = {
   POPUP_CLASS: '.film-details',
   SORT_BUTTON: '.sort__button',
-  ACTIVE_SORT_BUTTON: 'sort__button--active',
 };
 
 const Emojis = {
@@ -45,6 +44,25 @@ const Emojis = {
   SLEEPING: 'sleeping',
   PUKE: 'puke',
   ANGRY: 'angry',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+const UserAction = {
+  UPDATE_FILMCARD: 'UPDATE_FILMCARD',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+};
+
+const NoFilmsType = {
+  [FilterType.ALL]: 'There are no movies in our database',
+  [FilterType. WATCHLIST]: 'There are no movies to watch now',
+  [FilterType.HISTORY]: 'There are no watched movies now',
+  [FilterType.FAVORITES]: 'There are no favorite movies now'
 };
 
 // Константы для моковых данных
@@ -115,5 +133,8 @@ export {
   UserRatings,
   Classes,
   SortType,
-  Emojis
+  Emojis,
+  UpdateType,
+  UserAction,
+  NoFilmsType,
 };

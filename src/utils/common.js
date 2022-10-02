@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { MIN_IN_HOUR, FilterType, TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT } from '../const.js';
+import { MIN_IN_HOUR, FilterType} from '../const.js';
 
 // Функции применяемые в проекте
 const getRuntimeInHours = (runtime) => {
@@ -15,7 +15,7 @@ const humanizeCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
 const humanizeReleaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
 
 const filter = {
-  [FilterType.ALL]: (filmCards) => filmCards.length,
+  [FilterType.ALL]: (filmCards) => filmCards,
   [FilterType.WATCHLIST]: (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.watchlist),
   [FilterType.HISTORY]: (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.alreadyWatched),
   [FilterType.FAVORITES]: (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.favorite),
@@ -24,49 +24,6 @@ const filter = {
 const commentFilter = (filmCard, comments) => comments.filter((comment) => filmCard.comments.includes(comment.id));
 
 const watchedFilmsFilter = (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.alreadyWatched).length;
-
-const theMostTopRatedFilmSort = (filmCards) => filmCards.sort((a, b) => {
-  if (a.filmInfo.totalRating < b.filmInfo.totalRating) {
-    return 1;
-  }
-  if (a.filmInfo.totalRating > b.filmInfo.totalRating) {
-    return -1;
-  }
-  return 0;
-}).slice(0, TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT);
-
-const theMostCommentedFilmSort = (filmCards) => filmCards.sort((a, b) => {
-  if (a.comments.length < b.comments.length) {
-    return 1;
-  }
-  if (a.comments.length > b.comments.length) {
-    return -1;
-  }
-  return 0;
-}).slice(0, TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT);
-
-const getTheTwoMostFilms = (filmCards, parameter) => {
-  switch (parameter) {
-    case 'rating':
-      return theMostTopRatedFilmSort(filmCards);
-    case 'comments':
-      return theMostCommentedFilmSort(filmCards);
-  }
-};
-
-const updateFilmCard = (filmCards, update) => {
-  const index = filmCards.findIndex((filmCard) => filmCard.id === update.id);
-
-  if (index === -1) {
-    return filmCards;
-  }
-
-  return [
-    ...filmCards.slice(0, index),
-    update,
-    ...filmCards.slice(index + 1)
-  ];
-};
 
 const setActiveClass = (value, activeClass) => (value) ? activeClass : '';
 
@@ -110,8 +67,6 @@ export {
   filter,
   commentFilter,
   watchedFilmsFilter,
-  getTheTwoMostFilms,
-  updateFilmCard,
   setActiveClass,
   sortByDate,
   sortByRating,

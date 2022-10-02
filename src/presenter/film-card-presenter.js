@@ -1,7 +1,7 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
 import { render, remove, replace } from '../framework/render.js';
-import { Classes } from '../const.js';
+import { Classes, UserAction, UpdateType } from '../const.js';
 import { commentFilter } from '../utils/common.js';
 
 export default class FilmCardPresenter {
@@ -20,13 +20,13 @@ export default class FilmCardPresenter {
 
   init = (filmCard, filmComments) => {
     this.#filmCard = filmCard;
-    this.#filmComments = filmComments;
+    this.#filmComments = commentFilter(this.#filmCard, filmComments);
 
     const prevFilmCardComponent = this.#filmCardComponent;
     const prevFilmPopup = this.#filmPopup;
 
     this.#filmCardComponent = new FilmCardView(this.#filmCard);
-    this.#filmPopup = new FilmPopupView(this.#filmCard, commentFilter(this.#filmCard, this.#filmComments));
+    this.#filmPopup = new FilmPopupView(this.#filmCard, this.#filmComments);
 
     this.#filmCardComponent.setClickHandler(() => {
       this.#showPopup();
@@ -61,9 +61,10 @@ export default class FilmCardPresenter {
   };
 
   #showPopup = () => {
-    const popup = document.querySelector(Classes.POPUP_CLASS);
-    if (popup) {
-      document.body.removeChild(popup);
+    const prevPopup = document.querySelector(Classes.POPUP_CLASS);
+    if (prevPopup) {
+      // document.body.removeChild(prevPopup);
+      this.#closePopup();
     }
     render(this.#filmPopup, document.body);
     document.body.classList.add('hide-overflow');
@@ -75,12 +76,14 @@ export default class FilmCardPresenter {
     this.#filmPopup.setFavoriteClickHandler(this.#favoriteClickHandler);
     this.#filmPopup.setWatchlistClickHandler(this.#watchlistClickHandler);
     this.#filmPopup.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
+    this.#filmPopup.setAddCommentHandler(this.#commentAddHandler);
+    this.#filmPopup.setDeleteClickHandler(this.#deleteClickHandler);
   };
 
   #closePopup = () => {
     remove(this.#filmPopup);
     document.body.classList.remove('hide-overflow');
-    this.#filmPopup.reset(this.#filmCard, commentFilter(this.#filmCard, this.#filmComments));
+    this.#filmPopup.reset(this.#filmCard, this.#filmComments);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
@@ -93,15 +96,56 @@ export default class FilmCardPresenter {
   };
 
   #favoriteClickHandler = () => {
-    this.#changeData({ ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, favorite: !this.#filmCard.userDetails.favorite } });
+    const changedData = !this.#filmCard.userDetails.favorite;
+    this.#filmCard.userDetails.favorite = changedData;
+    const filmCard = this.#filmCard;
+    this.#changeData(
+      UserAction.UPDATE_FILMCARD,
+      UpdateType.MINOR,
+      filmCard
+    );
   };
 
   #watchedClickHandler = () => {
-    this.#changeData({ ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, alreadyWatched: !this.#filmCard.userDetails.alreadyWatched } });
+    const changedData = !this.#filmCard.userDetails.alreadyWatched;
+    this.#filmCard.userDetails.alreadyWatched = changedData;
+    const filmCard = this.#filmCard;
+    this.#changeData(
+      UserAction.UPDATE_FILMCARD,
+      UpdateType.MINOR,
+      filmCard
+    );
   };
 
   #watchlistClickHandler = () => {
-    this.#changeData({ ...this.#filmCard, userDetails: { ...this.#filmCard.userDetails, watchlist: !this.#filmCard.userDetails.watchlist } });
+    const changedData = !this.#filmCard.userDetails.watchlist;
+    this.#filmCard.userDetails.watchlist = changedData;
+    const filmCard = this.#filmCard;
+    this.#changeData(
+      UserAction.UPDATE_FILMCARD,
+      UpdateType.MINOR,
+      filmCard
+    );
   };
 
+  #commentAddHandler = (comment) => {
+    this.#filmCard.comments.push(comment.id);
+    const filmCard = this.#filmCard;
+    this.#changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+      { comment, filmCard }
+    );
+  };
+
+  #deleteClickHandler = (commentId) => {
+    const index = this.#filmCard.comments.findIndex((id) => Number(commentId) === id);
+    this.#filmCard.comments.splice(index, 1);
+    const filmCard = this.#filmCard;
+    this.#changeData(
+      UserAction.DELETE_COMMENT,
+      UpdateType.PATCH,
+      { commentId, filmCard }
+    );
+  };
 }

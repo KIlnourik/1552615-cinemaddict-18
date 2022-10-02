@@ -1,5 +1,5 @@
 import {render, remove, replace} from '../framework/render.js';
-import FilmsFiltersView from '../view/film-card-view';
+import FilmsFiltersView from '../view/films-filters-view.js';
 import {filter} from '../utils/common.js';
 import { FilterType, UpdateType } from '../const.js';
 
@@ -9,10 +9,13 @@ export default class FilterPresenter {
   #filterContainer = null;
   #filterComponent = null;
 
-  constructor(filterModel, filmCardsModel, filterContainer) {
+  constructor(filterContainer, filterModel, filmCardsModel) {
     this.#filterModel = filterModel;
     this.#filmCardsModel = filmCardsModel;
     this.#filterContainer = filterContainer;
+
+    this.#filmCardsModel.addObserver(this.#modelEventHandler);
+    this.#filterModel.addObserver(this.#modelEventHandler);
   }
 
   get filters() {
@@ -21,7 +24,7 @@ export default class FilterPresenter {
       {
         type: FilterType.ALL,
         name: 'All movies',
-        count: filter[FilterType.ALL](filmCards),
+        count: filter[FilterType.ALL](filmCards).length,
       },
       {
         type: FilterType.WATCHLIST,
@@ -45,14 +48,21 @@ export default class FilterPresenter {
     const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
 
-    this.#filterComponent = new FilmsFiltersView(filters, this.#filterModel.filter);
-
+    this.#filterComponent = new FilmsFiltersView(filters, this.#filterModel.filters);
+    this.#filterComponent.setFilterTypeChangeHandler(this.#filterTypeChangeHandler);
     if (prevFilterComponent === null) {
       render(this.#filterComponent, this.#filterContainer);
       return;
     }
-    replace(this.#filterComponent, prevFilterComponent);
+
+    if (this.#filterContainer.contains(prevFilterComponent.element)) {
+      replace(this.#filterComponent, prevFilterComponent);
+    }
     remove(prevFilterComponent);
+  };
+
+  remove = () => {
+    remove(this.#filterComponent);
   };
 
   #modelEventHandler = () => {
@@ -63,7 +73,7 @@ export default class FilterPresenter {
     if (this.#filterModel.filter === filterType) {
       return;
     }
-    this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this.#filterModel.setFilters(UpdateType.MAJOR, filterType);
   };
 }
 

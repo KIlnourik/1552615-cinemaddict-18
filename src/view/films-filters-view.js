@@ -1,10 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createFilterItemsTemplate = (filter) => {
-  const { name, count } = filter;
+const createFilterItemsTemplate = (filter, currentFilterType) => {
+  const { type, name, count } = filter;
   const filterItemTemplates = (name === 'All movies')
-    ? `<a href="#all" class="main-navigation__item main-navigation__item--active" data-filter-type="${name}">All movies</a>`
-    : `<a href="#watchlist" class="main-navigation__item main-navigation__item--active" data-filter-type="${name}">${name} <span class="main-navigation__item-count">${count}</span></a>`;
+    ? `<a href="#all" class="main-navigation__item ${type === currentFilterType ? 'main-navigation__item--active' : ''}" data-filter-type="${name}">All movies</a>`
+    : `<a href="#watchlist" class="main-navigation__item ${type === currentFilterType ? 'main-navigation__item--active' : ''}" data-filter-type="${name}">${name} <span class="main-navigation__item-count">${count}</span></a>`;
 
   return filterItemTemplates;
 };

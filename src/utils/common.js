@@ -15,7 +15,7 @@ const humanizeCommentDate = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
 const humanizeReleaseDate = (date) => dayjs(date).format('DD MMMM YYYY');
 
 const filter = {
-  [FilterType.ALL]: (filmCards) => filmCards.length,
+  [FilterType.ALL]: (filmCards) => filmCards,
   [FilterType.WATCHLIST]: (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.watchlist),
   [FilterType.HISTORY]: (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.alreadyWatched),
   [FilterType.FAVORITES]: (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.favorite),

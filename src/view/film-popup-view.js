@@ -1,3 +1,4 @@
+import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { TITLES_AND_POSTERS, Emojis } from '../const.js';
 import { getPoster, getRandomInteger } from '../utils/mocks.js';
@@ -47,7 +48,7 @@ const createCommentItemTemplate = (filmComment) => filmComment ?
       <img src="./images/emoji/${filmComment.emotion}.png" width="55" height="55" alt="emoji-${filmComment.emotion}">
     </span>
     <div>
-      <p class="film-details__comment-text">${filmComment.comment}</p>
+      <p class="film-details__comment-text">${he.encode(filmComment.comment)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${filmComment.author}</span>
         <span class="film-details__comment-day">${humanizeCommentDate(filmComment.date)}</span>

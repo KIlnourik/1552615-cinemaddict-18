@@ -1,7 +1,5 @@
 import Observable from '../framework/observable.js';
 import { generateFilmCard } from '../mock/film.js';
-// import { getRandomInteger } from '../utils/mocks.js';
-// import { MAX_COMMENT_COUNT, MIN_RATING_VALUE} from '../const.js';
 
 export default class FilmCardModel extends Observable{
 

@@ -58,6 +58,13 @@ const UserAction = {
   DELETE_COMMENT: 'DELETE_COMMENT',
 };
 
+const NoFilmsType = {
+  [FilterType.ALL]: 'There are no movies in our database',
+  [FilterType. WATCHLIST]: 'There are no movies to watch now',
+  [FilterType.HISTORY]: 'There are no watched movies now',
+  [FilterType.FAVORITES]: 'There are no favorite movies now'
+};
+
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
@@ -129,4 +136,5 @@ export {
   Emojis,
   UpdateType,
   UserAction,
+  NoFilmsType,
 };

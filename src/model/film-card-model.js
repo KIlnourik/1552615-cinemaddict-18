@@ -2,8 +2,17 @@ import Observable from '../framework/observable.js';
 import { generateFilmCard } from '../mock/film.js';
 
 export default class FilmCardModel extends Observable{
-
+  #filmsApiSrevice = null;
   #filmCards = Array.from({length: 25}, generateFilmCard);
+
+  constructor(filmsApiServer) {
+    super();
+    this.#filmsApiSrevice = filmsApiServer;
+
+    this.#filmsApiSrevice.filmCards.then((filmCards) => {
+      console.log(filmCards);
+    });
+  }
 
   get filmCards () {
     return this.#filmCards;

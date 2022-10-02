@@ -70,6 +70,9 @@ const Method = {
   PUT: 'PUT',
 };
 
+const AUTHORIZATION = 'Basic l1sa2jcw454fsh255';
+const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict';
+
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
@@ -143,4 +146,6 @@ export {
   UserAction,
   NoFilmsType,
   Method,
+  END_POINT,
+  AUTHORIZATION
 };

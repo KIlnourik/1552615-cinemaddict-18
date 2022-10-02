@@ -65,6 +65,11 @@ const NoFilmsType = {
   [FilterType.FAVORITES]: 'There are no favorite movies now'
 };
 
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+};
+
 // Константы для моковых данных
 const MIN_RATING_VALUE = 0;
 const MAX_RATING_VALUE = 10;
@@ -137,4 +142,5 @@ export {
   UpdateType,
   UserAction,
   NoFilmsType,
+  Method,
 };

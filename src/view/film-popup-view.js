@@ -1,7 +1,7 @@
 import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { TITLES_AND_POSTERS, Emojis } from '../const.js';
-import { getPoster, getRandomInteger } from '../utils/mocks.js';
+import { Emojis } from '../const.js';
+import { getRandomInteger } from '../utils/mocks.js';
 import { getRuntimeInHours, humanizeReleaseDate, humanizeCommentDate, setActiveClass } from '../utils/common.js';
 
 const isCheckedEmoji = (currentEmotion, emotion) => currentEmotion === emotion ? 'checked' : '';
@@ -71,6 +71,7 @@ const createFilmPopupView = (state) => {
     title,
     alternativeTitle,
     totalRating,
+    poster,
     ageRating,
     director,
     writers,
@@ -81,8 +82,6 @@ const createFilmPopupView = (state) => {
     description } = state.filmInfo;
 
   const { watchlist, alreadyWatched, favorite } = state.userDetails;
-
-  const filmPoster = getPoster(title, TITLES_AND_POSTERS);
 
   const showGenres = (arr) => arr.map((el) => `<span class="film-details__genre">${el}</span>`).join(' ');
 
@@ -95,7 +94,7 @@ const createFilmPopupView = (state) => {
     </div>
     <div class="film-details__info-wrap">
       <div class="film-details__poster">
-        <img class="film-details__poster-img" src="./images/posters/${filmPoster}" alt="">
+        <img class="film-details__poster-img" src="${poster}" alt="">
         <p class="film-details__age">${ageRating}</p>
       </div>
 

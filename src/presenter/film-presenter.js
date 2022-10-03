@@ -6,7 +6,7 @@ import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmsView from '../view/no-films-view.js';
 import FilterPresenter from './filter-presenter.js';
 import FilmCardPresenter from './film-card-presenter.js';
-
+import LoadingView from '../view/loading-view.js';
 
 import { FILMS_IN_LIST_COUNT, SortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { render, remove } from '../framework/render.js';
@@ -27,7 +27,9 @@ export default class FilmPresenter {
   #currentSortType = SortType.DEFAULT;
   #filterModel = null;
   #filterComponent = null;
+  #loadingComponent = new LoadingView();
   #filterType = FilterType.All;
+  #isLoading = true;
 
   constructor(mainContainer, filmCardsModel, commentModel, filterModel) {
     this.#mainContainer = mainContainer;
@@ -88,6 +90,11 @@ export default class FilmPresenter {
         this.#clearFilmList({ resetRenderedFilmCardsCount: true, resetSortType: true });
         this.#renderFilmList();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderFilmList();
+        break;
     }
   };
 
@@ -124,6 +131,10 @@ export default class FilmPresenter {
     render(this.#noFilmCardsComponent, this.#filmsContainer.element);
   };
 
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#filmsList.element);
+  };
+
   #renderFilmCard = (filmCard, filmComments) => {
     const filmCardComponent = new FilmCardPresenter(this.#filmsListContainer.element, this.#viewActionHandler);
     filmCardComponent.init(filmCard, filmComments);
@@ -146,6 +157,10 @@ export default class FilmPresenter {
     const filmCardsCount = filmCards.length;
     this.#filterComponent = new FilterPresenter(this.#mainContainer, this.#filterModel, this.#filmCardsModel);
     this.#filterComponent.init();
+    if (this.#isLoading) {
+      this.#renderLoading();
+    }
+
     this.#renderSort();
     render(this.#filmsContainer, this.#mainContainer);
     render(this.#filmsList, this.#filmsContainer.element);

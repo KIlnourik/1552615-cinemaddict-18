@@ -1,4 +1,5 @@
 import Observable from '../framework/observable.js';
+import { UpdateType } from '../const.js';
 
 export default class CommentModel extends Observable {
   #comments = [];
@@ -13,17 +14,17 @@ export default class CommentModel extends Observable {
     return this.#comments;
   }
 
-  set comments(comments) {
-    this.#comments = comments;
-  }
-
-  loadComments = (filmCardId) => {
+  init = async (filmCardId) => {
     try {
-      this.#comments = this.#commentsApiService.getComments(filmCardId);
+      this.#comments = await this.#commentsApiService.get(filmCardId);
+      // return this.#comments;
     } catch {
       this.#comments = [];
     }
+    this._notify(UpdateType.INIT);
+
   };
+
 
   addСomment = (updateType, update) => {
     this.#comments = [

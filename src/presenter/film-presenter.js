@@ -183,7 +183,6 @@ export default class FilmPresenter {
   };
 
   #renderFilmList = () => {
-    console.log(this.#commentModel.loadComments(1));
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
     this.#renderUserRank();

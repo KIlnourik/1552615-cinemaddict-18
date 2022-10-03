@@ -1,14 +1,13 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
-import { render, remove, replace} from '../framework/render.js';
-import { Classes, UserAction, UpdateType } from '../const.js';
+import { render, remove, replace } from '../framework/render.js';
+import { UserAction, UpdateType } from '../const.js';
 
 export default class FilmCardPresenter {
   #filmsListContainer = null;
   #changeData = null;
   #filmCardComponent = null;
   #filmPopup = null;
-
   #filmCard = null;
   #filmComments = null;
 
@@ -19,14 +18,14 @@ export default class FilmCardPresenter {
 
   init = (filmCard, filmComments) => {
     this.#filmCard = filmCard;
-    this.#filmComments = filmComments.loadComments(this.#filmCard.id);
-    console.log(this.#filmComments);
+    this.#filmComments = filmComments;
+    // console.log(this.#filmCard);
 
     const prevFilmCardComponent = this.#filmCardComponent;
-    const prevFilmPopup = this.#filmPopup;
+    // const prevFilmPopup = this.#filmPopup;
 
     this.#filmCardComponent = new FilmCardView(this.#filmCard);
-    this.#filmPopup = new FilmPopupView(this.#filmCard, this.#filmComments);
+    // this.#filmPopup = new FilmPopupView(this.#filmCard, this.#filmComments.init(this.#filmCard.id));
 
     this.#filmCardComponent.setClickHandler(() => {
       this.#showPopup();
@@ -46,11 +45,6 @@ export default class FilmCardPresenter {
       replace(this.#filmCardComponent, prevFilmCardComponent);
     }
 
-    if (document.body.contains(prevFilmPopup.element)) {
-      this.#closePopup();
-      this.#showPopup();
-    }
-
     remove(prevFilmCardComponent);
   };
 
@@ -60,9 +54,13 @@ export default class FilmCardPresenter {
   };
 
   #showPopup = () => {
-    const prevPopup = document.querySelector(Classes.POPUP_CLASS);
-    if (prevPopup) {
+    const prevFilmPopup = this.#filmPopup;
+    this.#filmComments.init(this.#filmCard.id);
+    const comments = this.#filmComments.comments;
+    this.#filmPopup = new FilmPopupView(this.#filmCard, comments);
+    if (document.body.contains(prevFilmPopup.element)) {
       this.#closePopup();
+      this.#showPopup();
     }
     render(this.#filmPopup, document.body);
     document.body.classList.add('hide-overflow');

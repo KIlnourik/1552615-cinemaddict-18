@@ -52,7 +52,7 @@ const createCommentItemTemplate = (filmComment) => filmComment ?
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${filmComment.author}</span>
         <span class="film-details__comment-day">${humanizeCommentDate(filmComment.date)}</span>
-        <button class="film-details__comment-delete" data-comment-id="${filmComment.id}">Delete</button>
+        <button class="film-details__comment-delete" data-comment-id="${filmComment.id}"> ${filmComment.isDeleting ? 'Deleting...' : 'Delete'}</button>
       </p>
     </div>
   </li>` : '';
@@ -317,6 +317,7 @@ export default class FilmPopupView extends AbstractStatefulView {
       emotion: null,
       scrollTop: 0,
       comment: null,
+      isDeleting: false,
     };
   };
 
@@ -327,6 +328,7 @@ export default class FilmPopupView extends AbstractStatefulView {
     delete filmCard.emotion;
     delete filmCard.scrollTop;
     delete filmCard.comment;
+    delete filmCard.isDeleting;
 
     return filmCard;
   };

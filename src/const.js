@@ -69,6 +69,8 @@ const NoFilmsType = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 const AUTHORIZATION = 'Basic l1sa2jcw454fsh255';

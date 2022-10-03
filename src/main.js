@@ -5,7 +5,7 @@ import FilmPresenter from './presenter/film-presenter.js';
 import FilmCardModel from './model/film-card-model.js';
 import CommentModel from './model/comment-model.js';
 import FilterModel from './model/filter-model.js';
-import FilmsApiService from '../films-api-service.js';
+import FilmsApiService from './films-api-service.js';
 
 import { END_POINT, AUTHORIZATION } from './const.js';
 

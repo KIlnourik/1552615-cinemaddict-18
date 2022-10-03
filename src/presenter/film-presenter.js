@@ -7,10 +7,15 @@ import NoFilmsView from '../view/no-films-view.js';
 import FilterPresenter from './filter-presenter.js';
 import FilmCardPresenter from './film-card-presenter.js';
 import LoadingView from '../view/loading-view.js';
+import UserRankView from '../view/user-rank-view.js';
+import StatisticView from '../view/statistic-view.js';
 
 import { FILMS_IN_LIST_COUNT, SortType, UpdateType, UserAction, FilterType } from '../const.js';
-import { render, remove } from '../framework/render.js';
+import { render, remove, replace, RenderPosition } from '../framework/render.js';
 import { sortByDate, sortByRating, filter } from '../utils/common.js';
+
+const siteHeader = document.querySelector('.header');
+const siteFooterStatistic = document.querySelector('.footer__statistics');
 
 export default class FilmPresenter {
   #filmsContainer = new FilmsView();
@@ -30,6 +35,8 @@ export default class FilmPresenter {
   #loadingComponent = new LoadingView();
   #filterType = FilterType.All;
   #isLoading = true;
+  #statisticComponent = null;
+  #userRankComponent = null;
 
   constructor(mainContainer, filmCardsModel, commentModel, filterModel) {
     this.#mainContainer = mainContainer;
@@ -120,6 +127,34 @@ export default class FilmPresenter {
     this.#renderFilmList();
   };
 
+  #renderUserRank = () => {
+    const prevUserRankComponent = this.#userRankComponent;
+
+    this.#userRankComponent = new UserRankView(this.#filmCardsModel.filmCards);
+
+    if (prevUserRankComponent === null) {
+      render(this.#userRankComponent, siteHeader);
+      return;
+    }
+
+    replace(this.#userRankComponent, prevUserRankComponent);
+    remove(prevUserRankComponent);
+  };
+
+  #renderStatistic = () => {
+    const prevStatisticComponent = this.#statisticComponent;
+
+    this.#statisticComponent = new StatisticView(this.#filmCardsModel.filmCards);
+
+    if (prevStatisticComponent === null) {
+      render(this.#statisticComponent, siteFooterStatistic);
+      return;
+    }
+
+    replace(this.#statisticComponent, prevStatisticComponent);
+    remove(prevStatisticComponent);
+  };
+
   #renderSort = () => {
     this.#sortFilterComponent = new SortFiltersView(this.#currentSortType);
     this.#sortFilterComponent.setSortTypeChangeHandler(this.#sortFilterTypeChangeHandler);
@@ -132,7 +167,7 @@ export default class FilmPresenter {
   };
 
   #renderLoading = () => {
-    render(this.#loadingComponent, this.#filmsList.element);
+    render(this.#loadingComponent, this.#filmsList.element, RenderPosition.AFTERBEGIN);
   };
 
   #renderFilmCard = (filmCard, filmComments) => {
@@ -155,6 +190,7 @@ export default class FilmPresenter {
 
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
+    this.#renderUserRank();
     this.#filterComponent = new FilterPresenter(this.#mainContainer, this.#filterModel, this.#filmCardsModel);
     this.#filterComponent.init();
     if (this.#isLoading) {
@@ -175,6 +211,8 @@ export default class FilmPresenter {
     if (this.filmCards.length > this.#renderedFilmCardsCount) {
       this.#renderShowMoreButton();
     }
+
+    this.#renderStatistic();
   };
 
   #clearFilmList = ({ resetRenderedFilmCardsCount = false, resetSortType = false } = {}) => {
@@ -182,6 +220,7 @@ export default class FilmPresenter {
     this.#filmCardPresenter.forEach((presenter) => presenter.destroy());
     this.#filmCardPresenter.clear();
     this.#filterComponent.remove();
+    remove(this.#statisticComponent);
     remove(this.#sortFilterComponent);
     remove(this.#showMoreButtonComponent);
 

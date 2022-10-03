@@ -1,6 +1,6 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
-import { render, remove, replace } from '../framework/render.js';
+import { render, remove, replace} from '../framework/render.js';
 import { Classes, UserAction, UpdateType } from '../const.js';
 import { commentFilter } from '../utils/common.js';
 
@@ -37,7 +37,6 @@ export default class FilmCardPresenter {
     this.#filmCardComponent.setWatchlistClickHandler(this.#watchlistClickHandler);
     this.#filmCardComponent.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
 
-
     if (prevFilmCardComponent === null) {
       render(this.#filmCardComponent, this.#filmsListContainer);
       return;
@@ -63,7 +62,6 @@ export default class FilmCardPresenter {
   #showPopup = () => {
     const prevPopup = document.querySelector(Classes.POPUP_CLASS);
     if (prevPopup) {
-      // document.body.removeChild(prevPopup);
       this.#closePopup();
     }
     render(this.#filmPopup, document.body);

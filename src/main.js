@@ -23,5 +23,6 @@ const filmPresenter = new FilmPresenter(siteMainElement, filmCardsModel, comment
 render(new UserRankView(filmCards), siteHeader);
 
 filmPresenter.init();
+filmCardsModel.init();
 
 render(new StatisticView(filmCards), siteFooterStatistic);

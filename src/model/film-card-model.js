@@ -1,18 +1,12 @@
 import Observable from '../framework/observable.js';
-import { generateFilmCard } from '../mock/film.js';
 
 export default class FilmCardModel extends Observable {
-  #filmsApiSrevice = null;
-  #filmCards = Array.from({ length: 25 }, generateFilmCard);
+  #filmsApiService = null;
+  #filmCards = [];
 
-  constructor(filmsApiServer) {
+  constructor(filmsApiService) {
     super();
-    this.#filmsApiSrevice = filmsApiServer;
-
-    this.#filmsApiSrevice.filmCards.then((filmCards) => {
-      // console.log(filmCards);
-      console.log(filmCards.map(this.#adaptToClient));
-    });
+    this.#filmsApiService = filmsApiService;
   }
 
   get filmCards() {
@@ -22,6 +16,15 @@ export default class FilmCardModel extends Observable {
   set filmCards(filmCards) {
     this.#filmCards = filmCards;
   }
+
+  init = async () => {
+    try {
+      const films = await this.#filmsApiService.filmCards;
+      this.#filmCards = films.map(this.#adaptToClient);
+    } catch (err) {
+      this.#filmCards = [];
+    }
+  };
 
   updateFilmCard = (updateType, update) => {
     const index = this.#filmCards.findIndex((filmCard) => filmCard.id === update.id);
@@ -39,30 +42,6 @@ export default class FilmCardModel extends Observable {
   };
 
   #adaptToClient = (filmCard) => {
-    // const adaptedFilmCards = {
-    //   ...filmCard,
-    //   alternativeTitle: filmCard['alternative_title'],
-    //   totalRating: filmCard['total_rating'],
-    //   ageRating: filmCard['age_rating'],
-    //   userDetails: filmCard['user_details'],
-    //   release: {
-    //     releaseCountry: filmCard['release.release_country'],
-    //   },
-    //   userDetails: {
-    //     alreadyWatched: filmCard.user_details['already_watched'],
-    //     watchingDate: filmCard.user_details['watching_date'],
-    //   },
-    // };
-
-    // delete filmCard['alternative_title'];
-    // delete filmCard['total_rating'];
-    // delete filmCard['age_rating'];
-    // delete filmCard.release['release_country'];
-    // delete filmCard.user_details['already_watched'];
-    // delete filmCard.user_details['watching_date'];
-    // delete filmCard['user_details'];
-
-    // return adaptedFilmCards;
 
     const {
       id,
@@ -91,6 +70,7 @@ export default class FilmCardModel extends Observable {
         favorite,
       },
     } = filmCard;
+
     return {
       id,
       comments,

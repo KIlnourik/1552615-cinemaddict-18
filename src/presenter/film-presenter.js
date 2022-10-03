@@ -32,7 +32,7 @@ export default class FilmPresenter {
   #currentSortType = SortType.DEFAULT;
   #filterModel = null;
   #filterComponent = null;
-  #loadingComponent = new LoadingView();
+  #loadingComponent = null;
   #filterType = FilterType.All;
   #isLoading = true;
   #statisticComponent = null;
@@ -163,7 +163,13 @@ export default class FilmPresenter {
   };
 
   #renderLoading = () => {
-    render(this.#loadingComponent, this.#filmsList.element, RenderPosition.AFTERBEGIN);
+    this.#loadingComponent = new LoadingView();
+    render(this.#loadingComponent, this.#filmsList.element);
+  };
+
+  #renderFilters = () => {
+    this.#filterComponent = new FilterPresenter(this.#mainContainer, this.#filterModel, this.#filmCardsModel);
+    this.#filterComponent.init();
   };
 
   #renderFilmCard = (filmCard, filmComments) => {
@@ -185,25 +191,28 @@ export default class FilmPresenter {
   #renderFilmList = () => {
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
-    this.#renderUserRank();
-    this.#filterComponent = new FilterPresenter(this.#mainContainer, this.#filterModel, this.#filmCardsModel);
-    this.#filterComponent.init();
-    if (this.#isLoading) {
-      this.#renderLoading();
-    }
-
-    this.#renderSort();
     render(this.#filmsContainer, this.#mainContainer);
     render(this.#filmsList, this.#filmsContainer.element);
     render(this.#filmsListContainer, this.#filmsList.element);
 
-    if (this.filmCards.length === 0) {
+    this.#renderUserRank();
+    this.#renderFilters();
+
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
+    this.#renderSort();
+
+
+
+    if (filmCardsCount === 0) {
       this.#renderNoFilms();
       return;
     }
     this.#renderFilmCards(filmCards.slice(0, Math.min(filmCardsCount, this.#renderedFilmCardsCount)), this.#commentModel);
 
-    if (this.filmCards.length > this.#renderedFilmCardsCount) {
+    if (filmCardsCount > this.#renderedFilmCardsCount) {
       this.#renderShowMoreButton();
     }
 

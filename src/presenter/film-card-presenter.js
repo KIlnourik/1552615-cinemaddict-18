@@ -1,7 +1,7 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
 import { render, remove, replace } from '../framework/render.js';
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, Classes } from '../const.js';
 
 export default class FilmCardPresenter {
   #filmsListContainer = null;
@@ -19,13 +19,10 @@ export default class FilmCardPresenter {
   init = (filmCard, filmComments) => {
     this.#filmCard = filmCard;
     this.#filmComments = filmComments;
-    // console.log(this.#filmCard);
+
 
     const prevFilmCardComponent = this.#filmCardComponent;
-    // const prevFilmPopup = this.#filmPopup;
-
     this.#filmCardComponent = new FilmCardView(this.#filmCard);
-    // this.#filmPopup = new FilmPopupView(this.#filmCard, this.#filmComments.init(this.#filmCard.id));
 
     this.#filmCardComponent.setClickHandler(() => {
       this.#showPopup();
@@ -53,14 +50,16 @@ export default class FilmCardPresenter {
     remove(this.#filmPopup);
   };
 
+
   #showPopup = () => {
-    const prevFilmPopup = this.#filmPopup;
+    const prevPopup = document.querySelector(Classes.POPUP_CLASS);
+    const prevPopupComponent = this.#filmPopup;
     this.#filmComments.init(this.#filmCard.id);
     const comments = this.#filmComments.comments;
     this.#filmPopup = new FilmPopupView(this.#filmCard, comments);
-    if (document.body.contains(prevFilmPopup.element)) {
-      this.#closePopup();
-      this.#showPopup();
+    if (prevPopup && prevPopupComponent) {
+      document.body.removeChild(prevPopup);
+      remove(prevPopupComponent);
     }
     render(this.#filmPopup, document.body);
     document.body.classList.add('hide-overflow');
@@ -79,7 +78,7 @@ export default class FilmCardPresenter {
   #closePopup = () => {
     remove(this.#filmPopup);
     document.body.classList.remove('hide-overflow');
-    this.#filmPopup.reset(this.#filmCard, this.#filmComments);
+    this.#filmPopup.reset(this.#filmCard, this.#filmComments.comments);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 

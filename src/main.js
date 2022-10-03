@@ -7,13 +7,12 @@ import CommentsApiService from './comments-api-service.js';
 
 import { END_POINT, AUTHORIZATION } from './const.js';
 
-
 const siteMainElement = document.querySelector('.main');
 
+const filterModel = new FilterModel();
 const filmCardsModel = new FilmCardModel(new FilmsApiService(END_POINT, AUTHORIZATION));
 const commentModel = new CommentModel(new CommentsApiService(END_POINT, AUTHORIZATION));
-const filterModel = new FilterModel();
 const filmPresenter = new FilmPresenter(siteMainElement, filmCardsModel, commentModel, filterModel);
 
-filmPresenter.init();
 filmCardsModel.init();
+filmPresenter.init();

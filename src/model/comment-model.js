@@ -17,12 +17,10 @@ export default class CommentModel extends Observable {
   init = async (filmCardId) => {
     try {
       this.#comments = await this.#commentsApiService.get(filmCardId);
-      // return this.#comments;
     } catch {
       this.#comments = [];
     }
     this._notify(UpdateType.INIT);
-
   };
 
 

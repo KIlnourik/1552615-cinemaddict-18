@@ -1,6 +1,6 @@
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
-import { render, remove, replace } from '../framework/render.js';
+import { render, remove, replace, RenderPosition } from '../framework/render.js';
 import { UserAction, UpdateType, Classes } from '../const.js';
 
 export default class FilmCardPresenter {
@@ -10,6 +10,7 @@ export default class FilmCardPresenter {
   #filmPopup = null;
   #filmCard = null;
   #filmComments = null;
+  #receivedComments = null;
 
   constructor(filmsListContainer, changeData) {
     this.#filmsListContainer = filmsListContainer;
@@ -20,6 +21,7 @@ export default class FilmCardPresenter {
     this.#filmCard = filmCard;
     this.#filmComments = filmComments;
 
+    this.#filmComments.init(this.#filmCard.id);
 
     const prevFilmCardComponent = this.#filmCardComponent;
     this.#filmCardComponent = new FilmCardView(this.#filmCard);
@@ -34,7 +36,7 @@ export default class FilmCardPresenter {
     this.#filmCardComponent.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
 
     if (prevFilmCardComponent === null) {
-      render(this.#filmCardComponent, this.#filmsListContainer);
+      render(this.#filmCardComponent, this.#filmsListContainer.element, RenderPosition.AFTERBEGIN);
       return;
     }
 
@@ -54,9 +56,11 @@ export default class FilmCardPresenter {
   #showPopup = () => {
     const prevPopup = document.querySelector(Classes.POPUP_CLASS);
     const prevPopupComponent = this.#filmPopup;
-    this.#filmComments.init(this.#filmCard.id);
-    const comments = this.#filmComments.comments;
-    this.#filmPopup = new FilmPopupView(this.#filmCard, comments);
+
+    // this.#filmComments.init(this.#filmCard.id);
+    // const comments = this.#filmComments.comments;
+    this.#filmPopup = new FilmPopupView(this.#filmCard, this.#filmComments.comments);
+
     if (prevPopup && prevPopupComponent) {
       document.body.removeChild(prevPopup);
       remove(prevPopupComponent);

@@ -1,6 +1,6 @@
-import {render, remove, replace, RenderPosition} from '../framework/render.js';
+import { render, remove, replace, RenderPosition } from '../framework/render.js';
 import FilmsFiltersView from '../view/films-filters-view.js';
-import {filter} from '../utils/common.js';
+import { filter } from '../utils/common.js';
 import { FilterType, UpdateType } from '../const.js';
 
 export default class FilterPresenter {
@@ -45,11 +45,11 @@ export default class FilterPresenter {
   }
 
   init = () => {
-    const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
-
+    const filters = this.filters;
     this.#filterComponent = new FilmsFiltersView(filters, this.#filterModel.filters);
     this.#filterComponent.setFilterTypeChangeHandler(this.#filterTypeChangeHandler);
+
     if (prevFilterComponent === null) {
       render(this.#filterComponent, this.#filterContainer, RenderPosition.AFTERBEGIN);
       return;

@@ -162,18 +162,18 @@ export default class FilmPresenter {
     render(this.#noFilmCardsComponent, this.#filmsContainer.element);
   };
 
+  #renderFilter = () => {
+    this.#filterComponent = new FilterPresenter(this.#mainContainer, this.#filterModel, this.#filmCardsModel);
+    this.#filterComponent.init();
+  };
+
   #renderLoading = () => {
     this.#loadingComponent = new LoadingView();
     render(this.#loadingComponent, this.#filmsList.element);
   };
 
-  #renderFilters = () => {
-    this.#filterComponent = new FilterPresenter(this.#mainContainer, this.#filterModel, this.#filmCardsModel);
-    this.#filterComponent.init();
-  };
-
   #renderFilmCard = (filmCard, filmComments) => {
-    const filmCardComponent = new FilmCardPresenter(this.#filmsListContainer.element, this.#viewActionHandler);
+    const filmCardComponent = new FilmCardPresenter(this.#filmsListContainer, this.#viewActionHandler);
     filmCardComponent.init(filmCard, filmComments);
     this.#filmCardPresenter.set(filmCard.id, filmCardComponent);
   };
@@ -192,19 +192,19 @@ export default class FilmPresenter {
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
     render(this.#filmsContainer, this.#mainContainer);
-    render(this.#filmsList, this.#filmsContainer.element);
-    render(this.#filmsListContainer, this.#filmsList.element);
 
     this.#renderUserRank();
-    this.#renderFilters();
+
+    this.#renderFilter();
+
+    render(this.#filmsList, this.#filmsContainer.element);
+    render(this.#filmsListContainer, this.#filmsList.element);
 
     if (this.#isLoading) {
       this.#renderLoading();
       return;
     }
     this.#renderSort();
-
-
 
     if (filmCardsCount === 0) {
       this.#renderNoFilms();

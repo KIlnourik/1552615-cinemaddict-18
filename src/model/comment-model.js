@@ -1,19 +1,29 @@
 import Observable from '../framework/observable.js';
-import { generateComment } from '../mock/comment.js';
-import { getRandomInteger } from '../utils/mocks.js';
-import { MAX_COMMENT_COUNT } from '../const.js';
 
-export default class CommentModel extends Observable{
-  #comments = Array.from({length: getRandomInteger(0, MAX_COMMENT_COUNT)}, generateComment);
+export default class CommentModel extends Observable {
+  #comments = [];
+  #commentsApiService = null;
 
+  constructor(commentsApiServer) {
+    super();
+    this.#commentsApiService = commentsApiServer;
+  }
 
-  get comments () {
+  get comments() {
     return this.#comments;
   }
 
-  set comments (comments) {
+  set comments(comments) {
     this.#comments = comments;
   }
+
+  loadComments = (filmCardId) => {
+    try {
+      this.#comments = this.#commentsApiService.getComments(filmCardId);
+    } catch {
+      this.#comments = [];
+    }
+  };
 
   addСomment = (updateType, update) => {
     this.#comments = [

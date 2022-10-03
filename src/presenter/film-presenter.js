@@ -60,10 +60,6 @@ export default class FilmPresenter {
     return filteredFilmCards;
   }
 
-  get comments() {
-    return this.#commentModel.comments;
-  }
-
   init = () => {
     this.#renderFilmList();
   };
@@ -87,7 +83,7 @@ export default class FilmPresenter {
   #modelEventHandler = (updateType, filmCard) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#filmCardPresenter.get(filmCard.id).init(filmCard, this.comments);
+        this.#filmCardPresenter.get(filmCard.id).init(filmCard, this.#commentModel);
         break;
       case UpdateType.MINOR:
         this.#clearFilmList();
@@ -187,7 +183,7 @@ export default class FilmPresenter {
   };
 
   #renderFilmList = () => {
-
+    console.log(this.#commentModel.loadComments(1));
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
     this.#renderUserRank();
@@ -206,7 +202,7 @@ export default class FilmPresenter {
       this.#renderNoFilms();
       return;
     }
-    this.#renderFilmCards(filmCards.slice(0, Math.min(filmCardsCount, this.#renderedFilmCardsCount)), this.comments);
+    this.#renderFilmCards(filmCards.slice(0, Math.min(filmCardsCount, this.#renderedFilmCardsCount)), this.#commentModel);
 
     if (this.filmCards.length > this.#renderedFilmCardsCount) {
       this.#renderShowMoreButton();
@@ -220,9 +216,9 @@ export default class FilmPresenter {
     this.#filmCardPresenter.forEach((presenter) => presenter.destroy());
     this.#filmCardPresenter.clear();
     this.#filterComponent.remove();
-    remove(this.#statisticComponent);
     remove(this.#sortFilterComponent);
     remove(this.#showMoreButtonComponent);
+    remove(this.#loadingComponent);
 
     if (resetRenderedFilmCardsCount) {
       this.#renderedFilmCardsCount = FILMS_IN_LIST_COUNT;

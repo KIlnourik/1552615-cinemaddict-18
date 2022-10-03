@@ -2,7 +2,6 @@ import FilmCardView from '../view/film-card-view.js';
 import FilmPopupView from '../view/film-popup-view.js';
 import { render, remove, replace} from '../framework/render.js';
 import { Classes, UserAction, UpdateType } from '../const.js';
-import { commentFilter } from '../utils/common.js';
 
 export default class FilmCardPresenter {
   #filmsListContainer = null;
@@ -20,7 +19,8 @@ export default class FilmCardPresenter {
 
   init = (filmCard, filmComments) => {
     this.#filmCard = filmCard;
-    this.#filmComments = commentFilter(this.#filmCard, filmComments);
+    this.#filmComments = filmComments.loadComments(this.#filmCard.id);
+    console.log(this.#filmComments);
 
     const prevFilmCardComponent = this.#filmCardComponent;
     const prevFilmPopup = this.#filmPopup;

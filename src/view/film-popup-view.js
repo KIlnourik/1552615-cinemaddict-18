@@ -1,7 +1,6 @@
 import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { TITLES_AND_POSTERS, Emojis } from '../const.js';
-import { getPoster, getRandomInteger } from '../utils/mocks.js';
+import { Emojis } from '../const.js';
 import { getRuntimeInHours, humanizeReleaseDate, humanizeCommentDate, setActiveClass } from '../utils/common.js';
 
 const isCheckedEmoji = (currentEmotion, emotion) => currentEmotion === emotion ? 'checked' : '';
@@ -52,7 +51,7 @@ const createCommentItemTemplate = (filmComment) => filmComment ?
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${filmComment.author}</span>
         <span class="film-details__comment-day">${humanizeCommentDate(filmComment.date)}</span>
-        <button class="film-details__comment-delete" data-comment-id="${filmComment.id}">Delete</button>
+        <button class="film-details__comment-delete" data-id="${filmComment.id}">${filmComment.isDeleting ? 'Deleting...' : 'Delete'}</button>
       </p>
     </div>
   </li>` : '';
@@ -78,11 +77,10 @@ const createFilmPopupView = (state) => {
     release,
     runtime,
     genre,
+    poster,
     description } = state.filmInfo;
 
   const { watchlist, alreadyWatched, favorite } = state.userDetails;
-
-  const filmPoster = getPoster(title, TITLES_AND_POSTERS);
 
   const showGenres = (arr) => arr.map((el) => `<span class="film-details__genre">${el}</span>`).join(' ');
 
@@ -95,7 +93,7 @@ const createFilmPopupView = (state) => {
     </div>
     <div class="film-details__info-wrap">
       <div class="film-details__poster">
-        <img class="film-details__poster-img" src="./images/posters/${filmPoster}" alt="">
+        <img class="film-details__poster-img" src="${poster}" alt="">
         <p class="film-details__age">${ageRating}</p>
       </div>
 
@@ -188,6 +186,7 @@ export default class FilmPopupView extends AbstractStatefulView {
 
   _restoreHandlers = () => {
     this.#setInnerHandlers();
+    this.setScrollPosition();
     this.setClickHandler(this._callback.click);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
     this.setMarkAsWatchedClickHandler(this._callback.markAsWatchedClick);
@@ -221,6 +220,10 @@ export default class FilmPopupView extends AbstractStatefulView {
     this._callback.deleteClick = callback;
   };
 
+  setScrollPosition = () => {
+    this.element.scrollTop = this._state.scrollTop;
+  };
+
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.favoriteClick();
@@ -248,10 +251,8 @@ export default class FilmPopupView extends AbstractStatefulView {
       const emotion = this._state.emotion;
 
       const userComment = {
-        id: getRandomInteger(0, 10000),
-        author: 'Kurmandaev Ilnur',
+        id: 'id',
         comment,
-        date: new Date,
         emotion,
       };
       this._callback.addComment(userComment);
@@ -260,7 +261,7 @@ export default class FilmPopupView extends AbstractStatefulView {
 
   #deleteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.deleteClick(evt.target.dataset.commentId);
+    this._callback.deleteClick(evt.target.dataset.id);
   };
 
   #emojiClickHandler = (evt) => {
@@ -300,13 +301,14 @@ export default class FilmPopupView extends AbstractStatefulView {
     this.element.querySelectorAll('.film-details__emoji-label').forEach((el) => el.addEventListener('click', this.#emojiClickHandler));
     this.element.addEventListener('scroll', this.#scrollHandler);
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#inputCommentHandler);
-    this.element.addEventListener('keydown', this.#commentAddHandler);
+    document.addEventListener('keydown', this.#commentAddHandler);
     this.element.querySelectorAll('.film-details__comment-delete').forEach((deleteBtn) => deleteBtn.addEventListener('click', this.#deleteClickHandler));
   };
 
   reset = (filmCard, filmComments) => {
     this.updateElement(
       FilmPopupView.parseFilmToState(filmCard, filmComments)
+
     );
   };
 
@@ -318,16 +320,17 @@ export default class FilmPopupView extends AbstractStatefulView {
       emotion: null,
       scrollTop: 0,
       comment: null,
+      isDeleting: false,
     };
   };
 
   static parseStateToFilm = (state) => {
     const filmCard = { ...state };
-
     delete filmCard.filmComments;
     delete filmCard.emotion;
     delete filmCard.scrollTop;
     delete filmCard.comment;
+    delete filmCard.isDeleting;
 
     return filmCard;
   };

@@ -1,17 +1,14 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeYear, getRuntimeInHours, setActiveClass } from '../utils/common.js';
-import { getPoster } from '../utils/mocks';
-import { MAX_DESCRIPTION_LENGTH, TITLES_AND_POSTERS, UNKNOWN_YEAR} from '../const.js';
+import { MAX_DESCRIPTION_LENGTH, UNKNOWN_YEAR} from '../const.js';
 
 const createFilmCardView = (filmCard) => {
-  const { title, totalRating, release, runtime, genre, description } = filmCard.filmInfo;
+  const { title, totalRating, release, runtime, genre, description, poster } = filmCard.filmInfo;
   const { watchlist, alreadyWatched, favorite } = filmCard.userDetails;
 
   const year = release.date !== null
     ? humanizeYear(release.date)
     : UNKNOWN_YEAR;
-
-  const filmPoster = getPoster(title, TITLES_AND_POSTERS);
 
   const getDescription = (descString, maxLength) => {
     if (descString.length > maxLength) {
@@ -30,7 +27,7 @@ const createFilmCardView = (filmCard) => {
         <span class="film-card__duration">${getRuntimeInHours(runtime)}</span>
         <span class="film-card__genre">${genre.join(', ')}</span>
       </p>
-      <img src="./images/posters/${filmPoster}" alt="" class="film-card__poster">
+      <img src="${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${getDescription(description, MAX_DESCRIPTION_LENGTH)}</p>
       <span class="film-card__comments">${filmCard.comments.length}</span>
     </a>

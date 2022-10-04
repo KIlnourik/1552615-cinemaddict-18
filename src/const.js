@@ -50,6 +50,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const UserAction = {
@@ -63,6 +64,20 @@ const NoFilmsType = {
   [FilterType. WATCHLIST]: 'There are no movies to watch now',
   [FilterType.HISTORY]: 'There are no watched movies now',
   [FilterType.FAVORITES]: 'There are no favorite movies now'
+};
+
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+  POST: 'POST',
+};
+
+const AUTHORIZATION = 'Basic 2jcw454l1safsh255';
+const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict';
+const TimeLimit = {
+  LOWER_LIMIT: 300,
+  UPPER_LIMIT: 1000
 };
 
 // Константы для моковых данных
@@ -137,4 +152,8 @@ export {
   UpdateType,
   UserAction,
   NoFilmsType,
+  Method,
+  END_POINT,
+  AUTHORIZATION,
+  TimeLimit,
 };

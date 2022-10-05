@@ -97,10 +97,12 @@ export default class FilmPresenter {
     this.#uiBlocker.unblock();
   };
 
-  #modelEventHandler = (updateType, filmCard) => {
+  #modelEventHandler = async (updateType, filmCard) => {
+    let comments;
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#filmCardPresenter.get(filmCard.id).init(filmCard, this.#commentsModel.get(filmCard.id));
+        comments = await this.#commentsModel.get(filmCard.id);
+        this.#filmCardPresenter.get(filmCard.id).init(filmCard, comments);
         break;
       case UpdateType.MINOR:
         this.#clearFilmList();

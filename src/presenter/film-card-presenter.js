@@ -50,8 +50,6 @@ export default class FilmCardPresenter {
 
     if (document.body.contains(prevFilmPopup.element)) {
       replace(this.#filmPopupComponent, prevFilmPopup);
-      this.#closePopup();
-      this.#showPopup();
     }
 
     remove(prevFilmCardComponent);
@@ -59,11 +57,10 @@ export default class FilmCardPresenter {
 
   destroy = () => {
     remove(this.#filmCardComponent);
-    // this.#closePopup();
   };
 
   setDeleting = () => {
-    this.#filmCardComponent.updateElement({
+    this.#filmPopupComponent.updateElement({
       isDeleting: true
     });
   };

@@ -23,8 +23,7 @@ export default class CommentModel extends Observable {
       this.#comments = [newComment, ...this.#comments];
       this._notify(updateType, newComment);
     } catch (err) {
-      throw new Error(err);
-      // throw new Error('Can\'t add comment');
+      throw new Error('Can\'t add comment');
     }
   };
 

@@ -15,7 +15,6 @@ export default class CommentsApiService extends ApiService {
     });
 
     const parsedResponse = await ApiService.parseResponse(response);
-    console.log(parsedResponse);
     return parsedResponse;
   };
 
@@ -28,8 +27,4 @@ export default class CommentsApiService extends ApiService {
     return response;
   };
 
-  // #adaptToServer = (comment) => {
-  //   const adaptedComment = comment;
-  //   return adaptedComment;
-  // };
 }

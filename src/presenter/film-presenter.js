@@ -66,33 +66,32 @@ export default class FilmPresenter {
     this.#renderFilmList();
   };
 
-  #viewActionHandler = (actionType, updateType, update) => {
+  #viewActionHandler = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_FILMCARD:
-        const currentFilmCard = this.#filmCardPresenter.get(update.id);
-        if (currentFilmCard.isPopup) {
-          // save popup
-        }
-        //save card
-
         try {
-          this.#filmCardsModel.updateFilmCard(updateType, update);
+          await this.#filmCardsModel.updateFilmCard(updateType, update);
         } catch (err) {
-          if (currentFilmCard.isPopup) {
-            // popup off disable
-          }
-          // card off disable
+          this.#filmCardPresenter.get(update.id).setAborting();
         }
         break;
       case UserAction.ADD_COMMENT:
-        // console.log(update);
-        this.#commentsModel.add(updateType, update.comment, update.filmCard);
-        this.#filmCardsModel.updateFilmCard(updateType, update.filmCard);
+        try {
+          this.#commentsModel.add(updateType, update.comment, update.filmCard);
+          this.#filmCardsModel.updateFilmCard(updateType, update.filmCard);
+        } catch(err) {
+          this.#filmCardPresenter.get(update.id).setAborting();
+        }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#commentsModel.delete(updateType, update.commentId);
-        this.#filmCardsModel.updateFilmCard(updateType, update.filmCard);
+        this.#filmCardPresenter.get(update.filmCard.id).setDeleting();
+        try {
+          await this.#commentsModel.delete(updateType, update.commentId);
+          this.#filmCardsModel.updateFilmCard(updateType, update.filmCard);
+        } catch(err) {
+          this.#filmCardPresenter.get(update.filmCard.id).setAborting();
+        }
         break;
     }
     this.#uiBlocker.unblock();

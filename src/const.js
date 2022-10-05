@@ -73,11 +73,11 @@ const Method = {
   POST: 'POST',
 };
 
-const AUTHORIZATION = 'Basic 2jcw454l1safsh255';
+const AUTHORIZATION = 'Basic fgdgfd33l1saffas55';
 const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict';
 const TimeLimit = {
   LOWER_LIMIT: 300,
-  UPPER_LIMIT: 1000
+  UPPER_LIMIT: 800
 };
 
 // Константы для моковых данных

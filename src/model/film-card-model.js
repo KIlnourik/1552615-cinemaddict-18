@@ -31,23 +31,16 @@ export default class FilmCardModel extends Observable {
     }
 
     try {
-      // console.log("FC", update);
       const response = await this.#filmsApiService.updateFilmCard(update);
-      // console.log("responce", response);
       const updatedFilmCard = this.#adaptToClient(response);
-      // console.log("FCU", updatedFilmCard);
       this.#filmCards = [
         ...this.#filmCards.slice(0, index),
         updatedFilmCard,
         ...this.#filmCards.slice(index + 1),
       ];
-      // console.log("карточки", this.#filmCards);
       this._notify(updateType, update);
-      // console.log('sdkjfhaksjdhfkj');
     } catch (err) {
-      // this.#filmCards.forEach((card) => console.log(card.id, card.comments));
-      throw new Error(err);
-      // throw new Error('Can\'t update filmcard');
+      throw new Error('Can\'t update filmcard');
     }
   };
 

@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { humanizeYear, getRuntimeInHours, setActiveClass } from '../utils/common.js';
-import { MAX_DESCRIPTION_LENGTH, UNKNOWN_YEAR} from '../const.js';
+import { MAX_DESCRIPTION_LENGTH} from '../const.js';
 
 const createFilmCardView = (filmCard) => {
   const { title, totalRating, release, runtime, genre, description, poster } = filmCard.filmInfo;
@@ -8,7 +8,7 @@ const createFilmCardView = (filmCard) => {
 
   const year = release.date !== null
     ? humanizeYear(release.date)
-    : UNKNOWN_YEAR;
+    : '';
 
   const getDescription = (descString, maxLength) => {
     if (descString.length > maxLength) {

@@ -1,38 +1,32 @@
 import FilmCardView from '../view/film-card-view.js';
-import FilmPopupView from '../view/film-popup-view.js';
 import { render, remove, replace } from '../framework/render.js';
-import { Classes, UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType } from '../const.js';
 
 export default class FilmCardPresenter {
   #filmsListContainer = null;
   #changeData = null;
   #filmCardComponent = null;
-  #filmPopupComponent = null;
   #commentsModel = null;
 
   #filmCard = null;
-  #filmComments = null;
-  #isPopup = false;
+  #filmPopupPresenter = null;
 
-  constructor(filmsListContainer, changeData, commentsModel) {
+  constructor(filmsListContainer, changeData, commentsModel, filmPopupPresenter) {
     this.#filmsListContainer = filmsListContainer;
     this.#changeData = changeData;
     this.#commentsModel = commentsModel;
+    this.#filmPopupPresenter = filmPopupPresenter;
   }
 
-  init = (filmCard, filmComments) => {
+  init = (filmCard) => {
     this.#filmCard = filmCard;
-    this.#filmComments = filmComments;
 
     const prevFilmCardComponent = this.#filmCardComponent;
-    const prevFilmPopup = this.#filmPopupComponent;
 
     this.#filmCardComponent = new FilmCardView(this.#filmCard);
-    this.#filmPopupComponent = new FilmPopupView(this.#filmCard, this.#filmComments);
 
     this.#filmCardComponent.setClickHandler(() => {
-      this.#showPopup();
-      document.addEventListener('keydown', this.#escKeyDownHandler);
+      this.#filmPopupPresenter.init(this.#filmCard);
     });
 
     this.#filmCardComponent.setFavoriteClickHandler(this.#favoriteClickHandler);
@@ -42,14 +36,8 @@ export default class FilmCardPresenter {
     if (prevFilmCardComponent === null) {
       render(this.#filmCardComponent, this.#filmsListContainer);
       return;
-    }
-
-    if (this.#filmsListContainer.contains(prevFilmCardComponent.element)) {
+    } else {
       replace(this.#filmCardComponent, prevFilmCardComponent);
-    }
-
-    if (document.body.contains(prevFilmPopup.element)) {
-      replace(this.#filmPopupComponent, prevFilmPopup);
     }
 
     remove(prevFilmCardComponent);
@@ -60,55 +48,9 @@ export default class FilmCardPresenter {
   };
 
   setDeleting = () => {
-    this.#filmPopupComponent.updateElement({
+    this.#filmCardComponent.updateElement({
       isDeleting: true
     });
-  };
-
-  setAborting = () => {
-    const resetFormState = () => {
-      this.#filmPopupComponent.updateElement({
-        isDeleting: false,
-      });
-    };
-    this.#filmPopupComponent.shake(resetFormState);
-  };
-
-  #showPopup = async () => {
-    const prevPopup = document.querySelector(Classes.POPUP_CLASS);
-    if (prevPopup) {
-      document.body.removeChild(prevPopup);
-    }
-    await this.#commentsModel.get(this.#filmCard.id);
-    render(this.#filmPopupComponent, document.body);
-    document.body.classList.add('hide-overflow');
-
-    this.#filmPopupComponent.setClickHandler(() => {
-      this.#closePopup();
-    });
-
-    this.#filmPopupComponent.setFavoriteClickHandler(this.#favoriteClickHandler);
-    this.#filmPopupComponent.setWatchlistClickHandler(this.#watchlistClickHandler);
-    this.#filmPopupComponent.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
-    this.#filmPopupComponent.setAddCommentHandler(this.#commentAddHandler);
-    this.#filmPopupComponent.setDeleteClickHandler(this.#deleteClickHandler);
-    this.#isPopup = true;
-  };
-
-  #closePopup = async () => {
-    remove(this.#filmPopupComponent);
-    document.body.classList.remove('hide-overflow');
-    this.#filmPopupComponent.reset(this.#filmCard, await this.#commentsModel.get(this.#filmCard.id));
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
-    this.#isPopup = false;
-  };
-
-  #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this.#closePopup();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
-    }
   };
 
   #favoriteClickHandler = () => {
@@ -141,27 +83,6 @@ export default class FilmCardPresenter {
       UserAction.UPDATE_FILMCARD,
       UpdateType.MINOR,
       filmCard
-    );
-  };
-
-  #commentAddHandler = (comment) => {
-    this.#filmCard.comments.push(comment.id);
-    const filmCard = this.#filmCard;
-    this.#changeData(
-      UserAction.ADD_COMMENT,
-      UpdateType.PATCH,
-      { comment, filmCard }
-    );
-  };
-
-  #deleteClickHandler = (commentId) => {
-    const index = this.#filmCard.comments.findIndex((id) => commentId === id);
-    this.#filmCard.comments.splice(index, 1);
-    const filmCard = this.#filmCard;
-    this.#changeData(
-      UserAction.DELETE_COMMENT,
-      UpdateType.PATCH,
-      { commentId, filmCard },
     );
   };
 }

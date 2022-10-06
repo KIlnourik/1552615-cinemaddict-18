@@ -6,6 +6,7 @@ import FilmListContainerView from '../view/film-list-container-view.js';
 import NoFilmsView from '../view/no-films-view.js';
 import LoadingView from '../view/loading-view.js';
 import FilmCardPresenter from './film-card-presenter.js';
+import FilmPopupPresenter from './film-popup-presenter.js';
 import UserRankView from '../view/user-rank-view.js';
 import StatisticView from '../view/statistic-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
@@ -37,6 +38,7 @@ export default class FilmPresenter {
   #loadingComponent = null;
   #statisticComponent = null;
   #userRankComponent = null;
+  #filmPopupPresenter = null;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   constructor(mainContainer, filmCardsModel, commentsModel, filterModel, filterPresenter) {
@@ -47,6 +49,7 @@ export default class FilmPresenter {
     this.#filmCardsModel.addObserver(this.#modelEventHandler);
     this.#filterModel.addObserver(this.#modelEventHandler);
     this.#filterComponent = filterPresenter;
+    this.#filmPopupPresenter = new FilmPopupPresenter(this.#filmCardsModel, this.#commentsModel);
   }
 
   get filmCards() {
@@ -80,7 +83,7 @@ export default class FilmPresenter {
         try {
           this.#commentsModel.add(updateType, update.comment, update.filmCard);
           this.#filmCardsModel.updateFilmCard(updateType, update.filmCard);
-        } catch(err) {
+        } catch (err) {
           this.#filmCardPresenter.get(update.id).setAborting();
         }
         break;
@@ -89,7 +92,7 @@ export default class FilmPresenter {
         try {
           await this.#commentsModel.delete(updateType, update.commentId);
           this.#filmCardsModel.updateFilmCard(updateType, update.filmCard);
-        } catch(err) {
+        } catch (err) {
           this.#filmCardPresenter.get(update.filmCard.id).setAborting();
         }
         break;
@@ -182,14 +185,14 @@ export default class FilmPresenter {
   };
 
   #renderFilmCard = async (filmCard) => {
-    const filmCardComponent = new FilmCardPresenter(this.#filmsListContainer.element, this.#viewActionHandler, this.#commentsModel);
-    const comments = await this.#commentsModel.get(filmCard.id);
-    filmCardComponent.init(filmCard, comments);
+    const filmCardComponent = new FilmCardPresenter(this.#filmsListContainer.element, this.#viewActionHandler, this.#commentsModel, this.#filmPopupPresenter);
+    // const comments = await this.#commentsModel.get(filmCard.id);
+    filmCardComponent.init(filmCard);
     this.#filmCardPresenter.set(filmCard.id, filmCardComponent);
   };
 
-  #renderFilmCards = (filmCards, filmComments) => {
-    filmCards.forEach((filmCard) => this.#renderFilmCard(filmCard, filmComments));
+  #renderFilmCards = (filmCards) => {
+    filmCards.forEach((filmCard) => this.#renderFilmCard(filmCard));
   };
 
   #renderShowMoreButton = () => {
@@ -199,7 +202,6 @@ export default class FilmPresenter {
   };
 
   #renderFilmList = () => {
-
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
     this.#renderUserRank();

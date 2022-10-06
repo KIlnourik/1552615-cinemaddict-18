@@ -47,12 +47,6 @@ export default class FilmCardPresenter {
     remove(this.#filmCardComponent);
   };
 
-  setDeleting = () => {
-    this.#filmCardComponent.updateElement({
-      isDeleting: true
-    });
-  };
-
   #favoriteClickHandler = () => {
     const changedData = !this.#filmCard.userDetails.favorite;
     this.#filmCard.userDetails.favorite = changedData;

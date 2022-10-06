@@ -44,20 +44,14 @@ export default class FilmPopupPresenter {
     remove(this.#filmPopupComponent);
   };
 
-  // setDeleting = () => {
-  //   this.#filmPopupComponent.updateElement({
-  //     isDeleting: true
-  //   });
-  // };
-
-  // setAborting = () => {
-  //   const resetFormState = () => {
-  //     this.#filmPopupComponent.updateElement({
-  //       isDeleting: false,
-  //     });
-  //   };
-  //   this.#filmPopupComponent.shake(resetFormState);
-  // };
+  #setAborting = () => {
+    const resetFormState = () => {
+      this.#filmPopupComponent.updateElement({
+        isDeleting: false,
+      });
+    };
+    this.#filmPopupComponent.shake(resetFormState);
+  };
 
   #showPopup = async () => {
     await this.#commentsModel.get(this.#filmCard.id);
@@ -79,9 +73,10 @@ export default class FilmPopupPresenter {
   };
 
   #closePopup = async () => {
+    const comments = await this.#commentsModel.get(this.#filmCard.id);
     remove(this.#filmPopupComponent);
     document.body.classList.remove('hide-overflow');
-    this.#filmPopupComponent.reset(this.#filmCard, await this.#commentsModel.get(this.#filmCard.id));
+    this.#filmPopupComponent.reset(this.#filmCard, comments);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#isPopup = false;
   };
@@ -148,8 +143,7 @@ export default class FilmPopupPresenter {
     );
   };
 
-  #modelEventHandler = (updateType, update) => {
-    this.#filmCard = update;
+  #modelEventHandler = () => {
     this.#updatePopup();
   };
 
@@ -176,11 +170,11 @@ export default class FilmPopupPresenter {
           this.#commentsModel.add(updateType, update.comment, update.filmCard);
           this.#filmsModel.updateFilmCard(updateType, update.filmCard);
         } catch (err) {
-          this.#filmCard.setAborting();
+          this.#filmPopupComponent.setAborting();
         }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#filmPopupComponent.setDeleting();
+        this.#filmPopupComponent.updateElement({isDeleting: true});
         try {
           await this.#commentsModel.delete(updateType, update.commentId);
           this.#filmsModel.updateFilmCard(updateType, update.filmCard);

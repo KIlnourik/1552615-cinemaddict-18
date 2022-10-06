@@ -186,7 +186,6 @@ export default class FilmPresenter {
 
   #renderFilmCard = async (filmCard) => {
     const filmCardComponent = new FilmCardPresenter(this.#filmsListContainer.element, this.#viewActionHandler, this.#commentsModel, this.#filmPopupPresenter);
-    // const comments = await this.#commentsModel.get(filmCard.id);
     filmCardComponent.init(filmCard);
     this.#filmCardPresenter.set(filmCard.id, filmCardComponent);
   };

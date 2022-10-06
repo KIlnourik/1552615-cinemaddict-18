@@ -82,7 +82,7 @@ const createFilmPopupView = (state) => {
 
   const { watchlist, alreadyWatched, favorite } = state.userDetails;
 
-  const showGenres = (arr) => arr.map((el) => `<span class="film-details__genre">${el}</span>`).join(' ');
+  const showGenres = (genres) => genres.map((el) => `<span class="film-details__genre">${el}</span>`).join(' ');
 
   return `
   <section class="film-details">
@@ -94,7 +94,7 @@ const createFilmPopupView = (state) => {
     <div class="film-details__info-wrap">
       <div class="film-details__poster">
         <img class="film-details__poster-img" src="${poster}" alt="">
-        <p class="film-details__age">${ageRating}</p>
+        <p class="film-details__age">${ageRating}+</p>
       </div>
 
       <div class="film-details__info">

@@ -29,7 +29,7 @@ const createFilmCardView = (filmCard) => {
       </p>
       <img src="${poster}" alt="" class="film-card__poster">
       <p class="film-card__description">${getDescription(description, MAX_DESCRIPTION_LENGTH)}</p>
-      <span class="film-card__comments">${filmCard.comments.length}</span>
+      <span class="film-card__comments">${filmCard.comments.length} comments</span>
     </a>
     <div class="film-card__controls">
       <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${setActiveClass(watchlist, 'film-card__controls-item--active')}" type="button">Add to watchlist</button>

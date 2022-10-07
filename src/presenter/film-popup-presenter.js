@@ -44,7 +44,7 @@ export default class FilmPopupPresenter {
     remove(this.#filmPopupComponent);
   };
 
-  #setAborting = () => {
+  setAborting = () => {
     const resetFormState = () => {
       this.#filmPopupComponent.updateElement({
         isDeleting: false,
@@ -58,7 +58,7 @@ export default class FilmPopupPresenter {
     this.#filmPopupComponent.setClickHandler(() => {
       this.#closePopup();
     });
-
+    this.#renderPopup();
     this.#filmPopupComponent.setFavoriteClickHandler(this.#favoriteClickHandler);
     this.#filmPopupComponent.setWatchlistClickHandler(this.#watchlistClickHandler);
     this.#filmPopupComponent.setMarkAsWatchedClickHandler(this.#watchedClickHandler);
@@ -174,7 +174,7 @@ export default class FilmPopupPresenter {
         }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#filmPopupComponent.updateElement({isDeleting: true});
+        this.#filmPopupComponent.updateElement({ isDeleting: true });
         try {
           await this.#commentsModel.delete(updateType, update.commentId);
           this.#filmsModel.updateFilmCard(updateType, update.filmCard);

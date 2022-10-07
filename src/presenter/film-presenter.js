@@ -175,8 +175,8 @@ export default class FilmPresenter {
 
   #renderSort = () => {
     this.#sortFilterComponent = new SortFiltersView(this.#currentSortType);
-    this.#sortFilterComponent.setSortTypeChangeHandler(this.#sortFilterTypeChangeHandler);
     render(this.#sortFilterComponent, this.#mainContainer);
+    this.#sortFilterComponent.setSortTypeChangeHandler(this.#sortFilterTypeChangeHandler);
   };
 
   #renderNoFilms = () => {
@@ -203,7 +203,9 @@ export default class FilmPresenter {
   #renderFilmList = () => {
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
+
     this.#renderUserRank();
+
     if (this.#isLoading) {
       this.#renderLoading();
       return;

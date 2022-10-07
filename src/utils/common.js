@@ -21,8 +21,6 @@ const filter = {
   [FilterType.FAVORITES]: (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.favorite),
 };
 
-const commentFilter = (filmCard, comments) => comments.filter((comment) => filmCard.comments.includes(comment.id));
-
 const watchedFilmsFilter = (filmCards) => filmCards.filter((filmCard) => filmCard.userDetails.alreadyWatched).length;
 
 const setActiveClass = (value, activeClass) => (value) ? activeClass : '';
@@ -65,7 +63,6 @@ export {
   humanizeReleaseDate,
   humanizeYear,
   filter,
-  commentFilter,
   watchedFilmsFilter,
   setActiveClass,
   sortByDate,

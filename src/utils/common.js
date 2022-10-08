@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { MIN_IN_HOUR, FilterType} from '../const.js';
+import { MIN_IN_HOUR, FilterType, Classes, SHAKE_ANIMATION_TIMEOUT} from '../const.js';
 
 // Функции применяемые в проекте
 const getRuntimeInHours = (runtime) => {
@@ -57,6 +57,14 @@ const sortByRating = (filmA, filmB) => {
   return 0;
 };
 
+const setShakeForElement = (element, callback) => {
+  document.querySelector(element).classList.add(Classes.SHAKE_CLASS);
+  setTimeout(() => {
+    document.querySelector(element).classList.remove(Classes.SHAKE_CLASS);
+    callback?.();
+  }, SHAKE_ANIMATION_TIMEOUT);
+};
+
 export {
   getRuntimeInHours,
   humanizeCommentDate,
@@ -67,4 +75,5 @@ export {
   setActiveClass,
   sortByDate,
   sortByRating,
+  setShakeForElement,
 };

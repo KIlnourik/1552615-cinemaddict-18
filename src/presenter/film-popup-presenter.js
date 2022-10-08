@@ -13,7 +13,6 @@ export default class FilmPopupPresenter {
   #isPopup = false;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
-
   constructor(filmsModel, commentsModel) {
     this.#commentsModel = commentsModel;
     this.#filmsModel = filmsModel;
@@ -42,18 +41,14 @@ export default class FilmPopupPresenter {
     remove(this.#filmPopupComponent);
   };
 
-  #setAborting = () => {
-    if (this.#isPopup) {
-      this.#filmPopupComponent.shake();
-      return;
-    }
-    const resetFormState = () => {
-      this.#filmPopupComponent.updateElement({
-        isDeleting: false,
-      });
-    };
-    this.#filmPopupComponent.shake(resetFormState);
+  #resetFormState = () => {
+    this.#filmPopupComponent.updateElement({
+      filmCard: this.#filmCard,
+      filmComments: this.#filmComments,
+      deletingCommentId: null,
+    });
   };
+
 
   #showPopup = async () => {
     await this.#commentsModel.get(this.#filmCard.id);
@@ -164,7 +159,7 @@ export default class FilmPopupPresenter {
         try {
           await this.#filmsModel.updateFilmCard(updateType, update);
         } catch (err) {
-          this.#filmCard.setAborting();
+          this.#filmPopupComponent.shakePopupButton();
         }
         break;
       case UserAction.ADD_COMMENT:
@@ -172,16 +167,16 @@ export default class FilmPopupPresenter {
           this.#commentsModel.add(updateType, update.comment, update.filmCard);
           this.#filmsModel.updateFilmCard(updateType, update.filmCard);
         } catch (err) {
-          this.#setAborting();
+          this.#filmPopupComponent.shakePopupInput(this.#resetFormState);
         }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#filmPopupComponent.updateElement({ deletingCommentId: update.commentId });
         try {
+          this.#filmPopupComponent.updateElement({ deletingCommentId: update.commentId });
           await this.#commentsModel.delete(updateType, update.commentId);
           this.#filmsModel.updateFilmCard(updateType, update.filmCard);
         } catch (err) {
-          this.#setAborting();
+          this.#filmPopupComponent.shakeDeletingComment(this.#resetFormState);
         }
         break;
     }

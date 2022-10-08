@@ -15,13 +15,14 @@ export default class CommentModel extends Observable {
   };
 
   add = async (updateType, update, film) => {
+    let newComment;
     try {
-      const newComment = await this.#apiService.add(update, film);
-      this.#comments = [newComment, ...this.#comments];
+      newComment = await this.#apiService.add(update, film);
       this._notify(updateType, newComment);
     } catch (err) {
       throw new Error('Can\'t add comment');
     }
+    this.#comments = [newComment, ...this.#comments];
   };
 
   delete = async (updateType, update) => {

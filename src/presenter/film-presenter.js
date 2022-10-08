@@ -22,23 +22,25 @@ export default class FilmPresenter {
   #filmsContainer = new FilmsView();
   #filmsList = new FilmListView();
   #filmsListContainer = new FilmListContainerView();
+  #filmCardPresenter = new Map();
+
   #showMoreButtonComponent = null;
   #noFilmCardsComponent = null;
   #mainContainer = null;
   #filmCardsModel = null;
   #commentsModel = null;
-  #renderedFilmCardsCount = FILMS_IN_LIST_COUNT;
   #sortFilterComponent = null;
-  #filmCardPresenter = new Map();
-  #currentSortType = SortType.DEFAULT;
   #filterModel = null;
   #filterComponent = null;
-  #filterType = FilterType.ALL;
   #isLoading = true;
   #loadingComponent = null;
   #statisticComponent = null;
   #userRankComponent = null;
   #filmPopupPresenter = null;
+
+  #renderedFilmCardsCount = FILMS_IN_LIST_COUNT;
+  #filterType = FilterType.ALL;
+  #currentSortType = SortType.DEFAULT;
   #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   constructor(mainContainer, filmCardsModel, commentsModel, filterModel, filterPresenter) {
@@ -56,15 +58,16 @@ export default class FilmPresenter {
     this.#filterType = this.#filterModel.filters;
     const filmCards = this.#filmCardsModel.filmCards;
     const filteredFilmCards = filter[this.#filterType](filmCards);
-    // console.log(filteredFilmCards);
+    // console.log("Фильмы до сортировок", filteredFilmCards);
     switch (this.#currentSortType) {
       case SortType.DATE:
-        // console.log(filteredFilmCards.sort(sortByDate));
+        // console.log("фильмы по дате", filteredFilmCards.sort(sortByDate));
         return filteredFilmCards.sort(sortByDate);
       case SortType.RATING:
-        // console.log(filteredFilmCards.sort(sortByRating));
+        // console.log("фильмы по рейтингу", filteredFilmCards.sort(sortByRating));
         return filteredFilmCards.sort(sortByRating);
     }
+    // console.log("фильмы по дефолту", filteredFilmCards);
     return filteredFilmCards;
   }
 
@@ -209,6 +212,7 @@ export default class FilmPresenter {
   };
 
   #renderFilmList = () => {
+
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
 

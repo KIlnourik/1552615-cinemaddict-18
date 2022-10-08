@@ -37,6 +37,10 @@ const SortType = {
 const Classes = {
   POPUP_CLASS: '.film-details',
   SORT_BUTTON: '.sort__button',
+  SHAKE_CLASS: 'shake',
+  POPUP_BTN_CLASS: '.film-details__controls',
+  POPUP_COMMENTS_CLASS: '.film-details__comments-list',
+  POPUP_FORM_INPUT_CLASS: '.film-details__new-comment',
 };
 
 const Emojis = {
@@ -80,6 +84,8 @@ const TimeLimit = {
   UPPER_LIMIT: 800
 };
 
+const SHAKE_ANIMATION_TIMEOUT = 300;
+
 export {
   FILMS_IN_LIST_COUNT,
   TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT,
@@ -97,4 +103,5 @@ export {
   END_POINT,
   AUTHORIZATION,
   TimeLimit,
+  SHAKE_ANIMATION_TIMEOUT,
 };

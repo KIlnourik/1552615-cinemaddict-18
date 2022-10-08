@@ -1,7 +1,7 @@
 import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { Emojis } from '../const.js';
-import { getRuntimeInHours, humanizeReleaseDate, humanizeCommentDate, setActiveClass } from '../utils/common.js';
+import { Emojis, Classes } from '../const.js';
+import { getRuntimeInHours, humanizeReleaseDate, humanizeCommentDate, setActiveClass, setShakeForElement } from '../utils/common.js';
 
 const isCheckedEmoji = (currentEmotion, emotion) => currentEmotion === emotion ? 'checked' : '';
 
@@ -166,7 +166,6 @@ const createFilmPopupView = (state) => {
   </section>`;
 };
 
-
 export default class FilmPopupView extends AbstractStatefulView {
   #filmCard = null;
   #filmComments = [];
@@ -222,6 +221,18 @@ export default class FilmPopupView extends AbstractStatefulView {
 
   setScrollPosition = () => {
     this.element.scrollTop = this._state.scrollTop;
+  };
+
+  shakePopupButton = () => {
+    setShakeForElement(Classes.POPUP_BTN_CLASS);
+  };
+
+  shakePopupInput = (callback) => {
+    setShakeForElement(Classes.POPUP_FORM_INPUT_CLASS, callback);
+  };
+
+  shakeDeletingComment = (callback) => {
+    setShakeForElement(Classes.POPUP_COMMENTS_CLASS, callback);
   };
 
   #favoriteClickHandler = (evt) => {

@@ -47,6 +47,10 @@ export default class FilmCardPresenter {
     remove(this.#filmCardComponent);
   };
 
+  setAborting = () => {
+    this.#filmCardComponent.shake(this.#filmCard);
+  };
+
   #favoriteClickHandler = () => {
     const changedData = !this.#filmCard.userDetails.favorite;
     this.#filmCard.userDetails.favorite = changedData;

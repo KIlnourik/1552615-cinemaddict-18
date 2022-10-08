@@ -40,7 +40,7 @@ const createCommentsFormTemplate = (selectedEmotion, comment) => `
     </div>
   </form>`;
 
-const createCommentItemTemplate = (filmComment) => filmComment ?
+const createCommentItemTemplate = (filmComment, deletingCommentId) => filmComment ?
   `
   <li class="film-details__comment">
     <span class="film-details__comment-emoji">
@@ -51,14 +51,14 @@ const createCommentItemTemplate = (filmComment) => filmComment ?
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${filmComment.author}</span>
         <span class="film-details__comment-day">${humanizeCommentDate(filmComment.date)}</span>
-        <button class="film-details__comment-delete" data-id="${filmComment.id}">${filmComment.isDeleting ? 'Deleting...' : 'Delete'}</button>
+        <button class="film-details__comment-delete" data-id="${filmComment.id}">${deletingCommentId === filmComment.id ? 'Deleting...' : 'Delete'}</button>
       </p>
     </div>
   </li>` : '';
 
-const createCommentsTemplate = (commentsItems) => {
+const createCommentsTemplate = (commentsItems, isDeleting) => {
   const commentsItemsTemplate = commentsItems
-    .map((commentItem) => createCommentItemTemplate(commentItem))
+    .map((commentItem) => createCommentItemTemplate(commentItem, isDeleting))
     .join('');
   return `<ul class="film-details__comments-list">
       ${commentsItemsTemplate}
@@ -157,7 +157,7 @@ const createFilmPopupView = (state) => {
     <section class="film-details__comments-wrap">
       <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${state.filmComments.length}</span></h3>
 
-      ${createCommentsTemplate(state.filmComments)}
+      ${createCommentsTemplate(state.filmComments, state.deletingCommentId)}
 
       ${createCommentsFormTemplate(state.emotion, state.comment)}
     </section>
@@ -308,7 +308,6 @@ export default class FilmPopupView extends AbstractStatefulView {
   reset = (filmCard, filmComments) => {
     this.updateElement(
       FilmPopupView.parseFilmToState(filmCard, filmComments)
-
     );
   };
 
@@ -320,7 +319,7 @@ export default class FilmPopupView extends AbstractStatefulView {
       emotion: null,
       scrollTop: 0,
       comment: null,
-      isDeleting: false,
+      deletingCommentId: null,
     };
   };
 
@@ -330,7 +329,7 @@ export default class FilmPopupView extends AbstractStatefulView {
     delete filmCard.emotion;
     delete filmCard.scrollTop;
     delete filmCard.comment;
-    delete filmCard.isDeleting;
+    delete filmCard.deletingCommentId;
 
     return filmCard;
   };

@@ -33,7 +33,7 @@ export default class FilmPresenter {
   #currentSortType = SortType.DEFAULT;
   #filterModel = null;
   #filterComponent = null;
-  #filterType = FilterType.All;
+  #filterType = FilterType.ALL;
   #isLoading = true;
   #loadingComponent = null;
   #statisticComponent = null;
@@ -56,10 +56,13 @@ export default class FilmPresenter {
     this.#filterType = this.#filterModel.filters;
     const filmCards = this.#filmCardsModel.filmCards;
     const filteredFilmCards = filter[this.#filterType](filmCards);
+    // console.log(filteredFilmCards);
     switch (this.#currentSortType) {
       case SortType.DATE:
+        // console.log(filteredFilmCards.sort(sortByDate));
         return filteredFilmCards.sort(sortByDate);
       case SortType.RATING:
+        // console.log(filteredFilmCards.sort(sortByRating));
         return filteredFilmCards.sort(sortByRating);
     }
     return filteredFilmCards;
@@ -88,7 +91,7 @@ export default class FilmPresenter {
         }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#filmCardPresenter.get(update.filmCard.id).setDeleting();
+        this.#filmCardPresenter.get(update.filmCard.id);
         try {
           await this.#commentsModel.delete(updateType, update.commentId);
           this.#filmCardsModel.updateFilmCard(updateType, update.filmCard);
@@ -200,6 +203,11 @@ export default class FilmPresenter {
     render(this.#showMoreButtonComponent, this.#filmsList.element);
   };
 
+  #renderLoading = () => {
+    this.#loadingComponent = new LoadingView();
+    render(this.#loadingComponent, this.#filmsList.element);
+  };
+
   #renderFilmList = () => {
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
@@ -248,10 +256,5 @@ export default class FilmPresenter {
     if (this.#noFilmCardsComponent) {
       remove(this.#noFilmCardsComponent);
     }
-  };
-
-  #renderLoading = () => {
-    this.#loadingComponent = new LoadingView();
-    render(this.#loadingComponent, this.#filmsList.element);
   };
 }

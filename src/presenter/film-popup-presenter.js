@@ -28,8 +28,6 @@ export default class FilmPopupPresenter {
     this.#filmsModel.addObserver(this.#modelEventHandler);
     this.#commentsModel.addObserver(this.#modelEventHandler);
 
-
-    this.#renderPopup();
     this.#showPopup();
     document.addEventListener('keydown', this.#escKeyDownHandler);
 
@@ -44,7 +42,11 @@ export default class FilmPopupPresenter {
     remove(this.#filmPopupComponent);
   };
 
-  setAborting = () => {
+  #setAborting = () => {
+    if (this.#isPopup) {
+      this.#filmPopupComponent.shake();
+      return;
+    }
     const resetFormState = () => {
       this.#filmPopupComponent.updateElement({
         isDeleting: false,
@@ -170,16 +172,16 @@ export default class FilmPopupPresenter {
           this.#commentsModel.add(updateType, update.comment, update.filmCard);
           this.#filmsModel.updateFilmCard(updateType, update.filmCard);
         } catch (err) {
-          this.#filmPopupComponent.setAborting();
+          this.#setAborting();
         }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#filmPopupComponent.updateElement({ isDeleting: true });
+        this.#filmPopupComponent.updateElement({ deletingCommentId: update.commentId });
         try {
           await this.#commentsModel.delete(updateType, update.commentId);
           this.#filmsModel.updateFilmCard(updateType, update.filmCard);
         } catch (err) {
-          this.#filmPopupComponent.setAborting();
+          this.#setAborting();
         }
         break;
     }

@@ -12,7 +12,7 @@ import StatisticView from '../view/statistic-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 import { FILMS_IN_LIST_COUNT, SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const.js';
-import { render, remove, replace, RenderPosition } from '../framework/render.js';
+import { render, remove, replace } from '../framework/render.js';
 import { sortByDate, sortByRating, filter } from '../utils/common.js';
 
 const siteHeader = document.querySelector('.header');
@@ -226,11 +226,8 @@ export default class FilmPresenter {
   };
 
   #renderFilmCardsList = () => {
-
-
     render(this.#filmsContainer, this.#mainContainer);
     render(this.#filmsList, this.#filmsContainer.element);
-
   };
 
   #renderFilmList = () => {
@@ -266,6 +263,6 @@ export default class FilmPresenter {
 
   #renderLoading = () => {
     this.#loadingComponent = new LoadingView();
-    render(this.#loadingComponent, this.#filmsList.element, RenderPosition.AFTEREND);
+    render(this.#loadingComponent, this.#filmsList.element);
   };
 }

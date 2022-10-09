@@ -12,5 +12,3 @@ export default class FilmListView extends AbstractView{
     return createFilmListView ();
   }
 }
-
-

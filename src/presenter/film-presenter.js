@@ -12,7 +12,7 @@ import StatisticView from '../view/statistic-view.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
 import { FILMS_IN_LIST_COUNT, SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const.js';
-import { render, remove, replace } from '../framework/render.js';
+import { render, remove, replace, RenderPosition } from '../framework/render.js';
 import { sortByDate, sortByRating, filter } from '../utils/common.js';
 
 const siteHeader = document.querySelector('.header');
@@ -68,6 +68,11 @@ export default class FilmPresenter {
   }
 
   init = () => {
+    this.#renderFilmCardsList();
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     this.#renderFilmList();
   };
 
@@ -202,36 +207,37 @@ export default class FilmPresenter {
     render(this.#showMoreButtonComponent, this.#filmsList.element);
   };
 
-  #renderLoading = () => {
-    this.#loadingComponent = new LoadingView();
-    render(this.#loadingComponent, this.#filmsList.element);
-  };
-
-  #renderFilmList = () => {
-
+  #renderFilmCardsListContainer = () => {
     const filmCards = this.filmCards;
     const filmCardsCount = filmCards.length;
 
-    this.#renderUserRank();
-
-    if (this.#isLoading) {
-      this.#renderLoading();
-      return;
-    }
-    this.#renderSort();
-    render(this.#filmsContainer, this.#mainContainer);
-    render(this.#filmsList, this.#filmsContainer.element);
     render(this.#filmsListContainer, this.#filmsList.element);
 
     if (this.filmCards.length === 0) {
       this.#renderNoFilms();
       return;
     }
+
     this.#renderFilmCards(filmCards.slice(0, Math.min(filmCardsCount, this.#renderedFilmCardsCount)));
 
     if (this.filmCards.length > this.#renderedFilmCardsCount) {
       this.#renderShowMoreButton();
     }
+  };
+
+  #renderFilmCardsList = () => {
+
+
+    render(this.#filmsContainer, this.#mainContainer);
+    render(this.#filmsList, this.#filmsContainer.element);
+
+  };
+
+  #renderFilmList = () => {
+    this.#renderUserRank();
+    this.#renderSort();
+    this.#renderFilmCardsList();
+    this.#renderFilmCardsListContainer();
     this.#renderStatistic();
   };
 
@@ -256,5 +262,10 @@ export default class FilmPresenter {
     if (this.#noFilmCardsComponent) {
       remove(this.#noFilmCardsComponent);
     }
+  };
+
+  #renderLoading = () => {
+    this.#loadingComponent = new LoadingView();
+    render(this.#loadingComponent, this.#filmsList.element, RenderPosition.AFTEREND);
   };
 }

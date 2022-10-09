@@ -17,5 +17,5 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmCa
 const filmPresenter = new FilmPresenter(siteMainElement, filmCardsModel, commentModel, filterModel);
 
 filmCardsModel.init();
-filmPresenter.init();
 filterPresenter.init();
+filmPresenter.init();

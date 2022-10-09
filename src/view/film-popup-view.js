@@ -262,7 +262,6 @@ export default class FilmPopupView extends AbstractStatefulView {
       const emotion = this._state.emotion;
 
       const userComment = {
-        id: 'id',
         comment,
         emotion,
       };

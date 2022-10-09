@@ -1,8 +1,6 @@
 // Константы, используемые в проекте
 const FILMS_IN_LIST_COUNT = 5;
-const TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT = 2;
 const MAX_DESCRIPTION_LENGTH = 140;
-
 const MIN_IN_HOUR = 60;
 const UserRatings = {
   NOVICE: {
@@ -88,7 +86,6 @@ const SHAKE_ANIMATION_TIMEOUT = 300;
 
 export {
   FILMS_IN_LIST_COUNT,
-  TOP_RATED_AND_MOST_COMMENTED_FILM_COUNT,
   MAX_DESCRIPTION_LENGTH,
   MIN_IN_HOUR,
   FilterType,

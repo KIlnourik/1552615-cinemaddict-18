@@ -56,18 +56,14 @@ export default class FilmPresenter {
 
   get filmCards() {
     this.#filterType = this.#filterModel.filters;
-    const filmCards = this.#filmCardsModel.filmCards;
+    const filmCards = this.#filmCardsModel.filmCards.slice();
     const filteredFilmCards = filter[this.#filterType](filmCards);
-    // console.log("Фильмы до сортировок", filteredFilmCards);
     switch (this.#currentSortType) {
       case SortType.DATE:
-        // console.log("фильмы по дате", filteredFilmCards.sort(sortByDate));
         return filteredFilmCards.sort(sortByDate);
       case SortType.RATING:
-        // console.log("фильмы по рейтингу", filteredFilmCards.sort(sortByRating));
         return filteredFilmCards.sort(sortByRating);
     }
-    // console.log("фильмы по дефолту", filteredFilmCards);
     return filteredFilmCards;
   }
 

@@ -120,12 +120,10 @@ export default class FilmPopupPresenter {
   };
 
   #commentAddHandler = (comment) => {
-    this.#filmCard.comments.push(comment.id);
-    const filmCard = this.#filmCard;
     this.#viewActionHandler(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
-      { comment, filmCard }
+      { comment, filmCard: this.#filmCard }
     );
   };
 
@@ -164,8 +162,8 @@ export default class FilmPopupPresenter {
         break;
       case UserAction.ADD_COMMENT:
         try {
-          this.#commentsModel.add(updateType, update.comment, update.filmCard);
-          this.#filmsModel.updateFilmCard(updateType, update.filmCard);
+          await this.#commentsModel.add(updateType, update.comment, update.filmCard);
+          await this.#filmsModel.updateFilmCard(updateType, update.filmCard);
         } catch (err) {
           this.#filmPopupComponent.shakePopupInput(this.#resetFormState);
         }
